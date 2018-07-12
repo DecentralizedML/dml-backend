@@ -1,8 +1,31 @@
 {
-    "plugins": ["node"],
-    "extends": ["eslint:recommended", "plugin:node/recommended"],
-    "rules": {
-        "node/exports-style": ["error", "module.exports"]
-    }
+  "env": {
+    "node": true,
+    "jest": true,
+    "es6": true
+  },
+  "extends": "airbnb-base",
+  "parser": "babel-eslint",
+  "rules": {
+    "arrow-body-style": ["error", "always"],
+    "arrow-parens": ["error", "always"],
+    "brace-style": ["off"],
+    "key-spacing": ["error", {
+      "align": {
+        "beforeColon": true,
+        "afterColon": true,
+        "on": "colon"
+      }
+    }],
+    "max-len": ["error", {
+      "code": 120,
+      "comments": 120
+    }],
+    "no-else-return": ["off"],
+    "no-multi-spaces": ["off"],
+    "prefer-destructuring": ["off"],
+    "quote-props": ["error", "consistent"],
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    "space-before-function-paren": ["error", "always"]
+  }
 }
-
