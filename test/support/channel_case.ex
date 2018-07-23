@@ -14,6 +14,7 @@ defmodule DmlWeb.ChannelCase do
   """
 
   use ExUnit.CaseTemplate
+  alias Ecto.Adapters.SQL.SandBox
 
   using do
     quote do
@@ -25,13 +26,11 @@ defmodule DmlWeb.ChannelCase do
     end
   end
 
-
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Dml.Repo)
+    :ok = Sandbox.checkout(Dml.Repo)
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Dml.Repo, {:shared, self()})
+      Sandbox.mode(Dml.Repo, {:shared, self()})
     end
     :ok
   end
-
 end
