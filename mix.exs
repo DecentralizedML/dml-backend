@@ -41,6 +41,7 @@ defmodule Dml.Mixfile do
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:credo, "~> 0.9.3", only: [:dev, :test], runtime: false},
+      {:ex_machina, "~> 2.2", only: :test},
       {:coverex, "~> 1.4.15", only: :test}
     ]
   end
