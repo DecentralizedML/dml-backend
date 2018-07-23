@@ -12,8 +12,8 @@ config :dml,
 # Configures the endpoint
 config :dml, DmlWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "hPuE6GMo3hEjHF9/NMiUhivA5LPQJKW4rfT/sH8WLw+r0g7Ud/L02myD0j+zt/D+",
-  render_errors: [view: DmlWeb.ErrorView, accepts: ~w(html json)],
+  secret_key_base: "lOQqH2L88+whaaP7IeI4ZuZc1R2H0CKCO02657XSSKFwjjtO4nHfb/Qaoeu6cAyL",
+  render_errors: [view: DmlWeb.ErrorView, accepts: ~w(json)],
   pubsub: [name: Dml.PubSub,
            adapter: Phoenix.PubSub.PG2]
 

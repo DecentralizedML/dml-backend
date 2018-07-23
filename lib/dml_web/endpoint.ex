@@ -14,8 +14,6 @@ defmodule DmlWeb.Endpoint do
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do
-    socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
-    plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
   end
 
@@ -35,7 +33,7 @@ defmodule DmlWeb.Endpoint do
   plug Plug.Session,
     store: :cookie,
     key: "_dml_key",
-    signing_salt: "OMdVOfp5"
+    signing_salt: "uTmMbTvV"
 
   plug DmlWeb.Router
 
