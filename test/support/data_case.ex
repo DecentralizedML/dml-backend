@@ -24,6 +24,7 @@ defmodule Dml.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Dml.DataCase
+      import Dml.Factory
     end
   end
 
