@@ -11,7 +11,8 @@ defmodule Dml.Mixfile do
       start_permanent: Mix.env == :prod,
       aliases: aliases(),
       deps: deps(),
-      test_coverage: [tool: Coverex.Task],
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [coveralls: :test]
     ]
   end
 
@@ -42,7 +43,7 @@ defmodule Dml.Mixfile do
       {:cowboy, "~> 1.0"},
       {:credo, "~> 0.9.3", only: [:dev, :test], runtime: false},
       {:ex_machina, "~> 2.2", only: :test},
-      {:coverex, "~> 1.4.15", only: :test}
+      {:excoveralls, "~> 0.9", only: :test}
     ]
   end
 
