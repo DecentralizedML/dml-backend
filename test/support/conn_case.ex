@@ -23,6 +23,7 @@ defmodule DmlWeb.ConnCase do
       use Phoenix.ConnTest
       import DmlWeb.Router.Helpers
       import Dml.Factory
+      import Dml.RenderJsonHelper
 
       # The default endpoint for testing
       @endpoint DmlWeb.Endpoint
