@@ -1,7 +1,8 @@
 defmodule DmlWeb.UserControllerTest do
   use DmlWeb.ConnCase
 
-  # alias Dml.Accounts
+  alias DmlWeb.UserView
+  alias Dml.Accounts
   # alias Dml.Accounts.User
 
   setup %{conn: conn} do
@@ -11,34 +12,38 @@ defmodule DmlWeb.UserControllerTest do
   describe "index" do
     test "lists all users", %{conn: conn} do
       user = insert(:user)
-      conn = get conn, user_path(conn, :index)
+      conn = get(conn, user_path(conn, :index))
 
-      assert json_response(conn, 200) == [%{
-        "id" => user.id,
-        "email" => user.email,
-        "wallet_address" => user.wallet_address
-      }]
+      assert json_response(conn, 200) == render_json("index.json", users: [user])
     end
   end
 
-  # describe "create user" do
-  #   test "renders user when data is valid", %{conn: conn} do
-  #     conn = post conn, user_path(conn, :create), user: @create_attrs
-  #     assert %{"id" => id} = json_response(conn, 201)["data"]
+  describe "create user" do
+    test "renders user when data is valid", %{conn: conn} do
+      params = params_for(:user)
+      conn = post(conn, user_path(conn, :create), user: params)
+      assert %{"id" => id} = json_response(conn, 201)
 
-  #     conn = get conn, user_path(conn, :show, id)
-  #     assert json_response(conn, 200)["data"] == %{
-  #       "id" => id,
-  #       "email" => "some email",
-  #       "password_hash" => "some password_hash",
-  #       "wallet_address" => "some wallet_address"}
-  #   end
+      user = Accounts.get_user!(id)
+      conn = get(conn, user_path(conn, :show, id))
+      assert json_response(conn, 200) == render_json("show.json", user: user)
+    end
 
-  #   test "renders errors when data is invalid", %{conn: conn} do
-  #     conn = post conn, user_path(conn, :create), user: @invalid_attrs
-  #     assert json_response(conn, 422)["errors"] != %{}
-  #   end
-  # end
+    test "renders errors when data is invalid", %{conn: conn} do
+      params = params_for(:user, email: "wrong")
+      conn = post(conn, user_path(conn, :create), user: params)
+      assert json_response(conn, 422)["errors"] != %{}
+    end
+  end
+
+  defp render_json(template, assigns) do
+    assigns = Map.new(assigns)
+
+    template
+    |> UserView.render(assigns)
+    |> Poison.encode!
+    |> Poison.decode!
+  end
 
   # describe "update user" do
   #   setup [:create_user]
