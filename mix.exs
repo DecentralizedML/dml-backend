@@ -12,7 +12,7 @@ defmodule Dml.Mixfile do
       aliases: aliases(),
       deps: deps(),
       test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [coveralls: :test]
+      preferred_cli_env: [coveralls: :test, coverage: :test]
     ]
   end
 
@@ -57,7 +57,12 @@ defmodule Dml.Mixfile do
     [
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      "test": ["ecto.create --quiet", "ecto.migrate", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate", "test"],
+      coverage: ["coveralls.html", &open_coverage_report/1]
     ]
+  end
+
+  defp open_coverage_report(_) do
+    Mix.shell.cmd("open cover/excoveralls.html")
   end
 end
