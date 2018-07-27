@@ -3,10 +3,12 @@ defmodule Dml.Factory do
 
   def user_factory do
     email = random_string(10)
+    password = random_string(20)
 
     %Dml.Accounts.User{
       email: "user_#{email}@kyokan.io",
-      password: random_string(10)
+      password: password,
+      password_confirmation: password
     }
   end
 
