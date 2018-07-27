@@ -2,6 +2,7 @@ defmodule DmlWeb.UserControllerTest do
   use DmlWeb.ConnCase
 
   alias Dml.Accounts
+  alias Dml.Guardian
   alias DmlWeb.UserView
   # alias Dml.Accounts.User
 
@@ -19,13 +20,15 @@ defmodule DmlWeb.UserControllerTest do
   end
 
   describe "create user" do
-    test "renders user when data is valid", %{conn: conn} do
+    test "renders JWT when data is valid", %{conn: conn} do
       params = params_for(:user)
       conn = post(conn, user_path(conn, :create), user: params)
-      assert %{"id" => id} = json_response(conn, 201)
+      assert %{"jwt" => token} = json_response(conn, 201)
 
-      user = Accounts.get_user!(id)
-      conn = get(conn, user_path(conn, :show, id))
+      {:ok, claims} = Guardian.decode_and_verify(token)
+      {:ok, user} = Guardian.resource_from_claims(claims)
+
+      conn = get(conn, user_path(conn, :show, user.id))
       assert json_response(conn, 200) == render_json(UserView, "show.json", user: user)
     end
 
@@ -33,6 +36,29 @@ defmodule DmlWeb.UserControllerTest do
       params = params_for(:user, email: "wrong")
       conn = post(conn, user_path(conn, :create), user: params)
       assert json_response(conn, 422)["errors"] != %{}
+    end
+  end
+
+  describe "authenticate user" do
+    test "renders JWT when data is valid", %{conn: conn} do
+      params = params_for(:user)
+      {:ok, user} = Accounts.create_user(params)
+
+      conn = post(conn, user_path(conn, :authenticate), email: user.email, password: user.password)
+      assert %{"jwt" => token} = json_response(conn, 200)
+
+      {:ok, claims} = Guardian.decode_and_verify(token)
+      {:ok, token_user} = Guardian.resource_from_claims(claims)
+
+      assert token_user == %{user | password: nil, password_confirmation: nil}
+    end
+
+    test "renders errors when data is invalid", %{conn: conn} do
+      params = params_for(:user)
+      {:ok, user} = Accounts.create_user(params)
+
+      conn = post(conn, user_path(conn, :authenticate), email: user.email, password: "invalid")
+      assert json_response(conn, 401)["errors"]["detail"] == "Unauthorized"
     end
   end
 

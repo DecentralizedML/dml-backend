@@ -9,5 +9,6 @@ defmodule DmlWeb.Router do
     pipe_through :api
 
     resources "/users", UserController, only: [:index, :create, :show]
+    post "/users/authenticate", UserController, :authenticate
   end
 end

@@ -3,6 +3,7 @@ defmodule DmlWeb.UserController do
 
   alias Dml.Accounts
   alias Dml.Accounts.User
+  alias Dml.Guardian
 
   action_fallback DmlWeb.FallbackController
 
@@ -12,17 +13,25 @@ defmodule DmlWeb.UserController do
   end
 
   def create(conn, %{"user" => user_params}) do
-    with {:ok, %User{} = user} <- Accounts.create_user(user_params) do
+    with {:ok, %User{} = user} <- Accounts.create_user(user_params),
+         {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", user_path(conn, :show, user))
-      |> render("show.json", user: user)
+      |> render("jwt.json", jwt: token)
     end
   end
 
   def show(conn, %{"id" => id}) do
     user = Accounts.get_user!(id)
     render(conn, "show.json", user: user)
+  end
+
+  def authenticate(conn, %{"email" => email, "password" => password}) do
+    case Accounts.sign_in_user(email, password) do
+      {:ok, token, _claims} -> conn |> render("jwt.json", jwt: token)
+      _ -> {:error, :unauthorized}
+    end
   end
 
   # def update(conn, %{"id" => id, "user" => user_params}) do

@@ -17,4 +17,10 @@ defmodule DmlWeb.FallbackController do
     |> put_status(:not_found)
     |> render(DmlWeb.ErrorView, :"404")
   end
+
+  def call(conn, {:error, :unauthorized}) do
+    conn
+    |> put_status(:unauthorized)
+    |> render(DmlWeb.ErrorView, :"401")
+  end
 end

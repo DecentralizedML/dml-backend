@@ -22,6 +22,11 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:user_id]
 
+# Guardian config
+config :dml, Dml.Guardian,
+  issuer: "DML",
+  secret_key: "u49DGdIfepFS21VX6A30S7K32KZOvm54SL/AsvCuSSN1UJM4K6fMR8ImEkmAqcJ5"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"

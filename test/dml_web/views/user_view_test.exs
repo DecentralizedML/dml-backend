@@ -30,4 +30,11 @@ defmodule DmlWeb.UserViewTest do
 
     assert rendered_user == user_json(user)
   end
+
+  test "jwt.json" do
+    token = "123"
+    rendered_token = UserView.render("jwt.json", %{jwt: token})
+
+    assert rendered_token == %{jwt: token}
+  end
 end
