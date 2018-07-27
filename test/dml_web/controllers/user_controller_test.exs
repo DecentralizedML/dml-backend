@@ -1,8 +1,8 @@
 defmodule DmlWeb.UserControllerTest do
   use DmlWeb.ConnCase
 
-  alias DmlWeb.UserView
   alias Dml.Accounts
+  alias DmlWeb.UserView
   # alias Dml.Accounts.User
 
   setup %{conn: conn} do
@@ -14,7 +14,7 @@ defmodule DmlWeb.UserControllerTest do
       user = insert(:user)
       conn = get(conn, user_path(conn, :index))
 
-      assert json_response(conn, 200) == render_json("index.json", users: [user])
+      assert json_response(conn, 200) == render_json(UserView, "index.json", users: [user])
     end
   end
 
@@ -26,7 +26,7 @@ defmodule DmlWeb.UserControllerTest do
 
       user = Accounts.get_user!(id)
       conn = get(conn, user_path(conn, :show, id))
-      assert json_response(conn, 200) == render_json("show.json", user: user)
+      assert json_response(conn, 200) == render_json(UserView, "show.json", user: user)
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -34,15 +34,6 @@ defmodule DmlWeb.UserControllerTest do
       conn = post(conn, user_path(conn, :create), user: params)
       assert json_response(conn, 422)["errors"] != %{}
     end
-  end
-
-  defp render_json(template, assigns) do
-    assigns = Map.new(assigns)
-
-    template
-    |> UserView.render(assigns)
-    |> Poison.encode!
-    |> Poison.decode!
   end
 
   # describe "update user" do
