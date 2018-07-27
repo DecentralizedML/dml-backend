@@ -8,6 +8,6 @@ defmodule DmlWeb.Router do
   scope "/api", DmlWeb do
     pipe_through :api
 
-    resources "/users", UserController, only: [:index]
+    resources "/users", UserController, only: [:index, :create, :show]
   end
 end
