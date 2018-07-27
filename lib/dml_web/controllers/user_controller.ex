@@ -18,7 +18,7 @@ defmodule DmlWeb.UserController do
       conn
       |> put_status(:created)
       |> put_resp_header("location", user_path(conn, :show, user))
-      |> render("jwt.json", jwt: token)
+      |> render("jwt.json", user: user, jwt: token)
     end
   end
 
@@ -29,7 +29,9 @@ defmodule DmlWeb.UserController do
 
   def authenticate(conn, %{"email" => email, "password" => password}) do
     case Accounts.sign_in_user(email, password) do
-      {:ok, token, _claims} -> conn |> render("jwt.json", jwt: token)
+      {:ok, token, claims} ->
+        {:ok, user} = Guardian.resource_from_claims(claims)
+        conn |> render("jwt.json", user: user, jwt: token)
       _ -> {:error, :unauthorized}
     end
   end

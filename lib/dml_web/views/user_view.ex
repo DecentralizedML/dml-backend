@@ -10,8 +10,8 @@ defmodule DmlWeb.UserView do
     render_one(user, UserView, "user.json")
   end
 
-  def render("jwt.json", %{jwt: jwt}) do
-    %{jwt: jwt}
+  def render("jwt.json", %{user: user, jwt: jwt}) do
+    %{jwt: jwt} |> Enum.into(render_one(user, UserView, "user.json"))
   end
 
   def render("user.json", %{user: user}) do
