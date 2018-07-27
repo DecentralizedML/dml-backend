@@ -35,13 +35,15 @@ defmodule Dml.AccountsTest do
     end
 
     test "create_user/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Accounts.create_user(@invalid_attrs)
+      assert {:error, changeset} = Accounts.create_user(@invalid_attrs)
+      assert "has invalid format" in errors_on(changeset).email
     end
 
     test "create_user/1 with duplicate email returns error changeset" do
       user = user_fixture()
       params = params_for(:user, email: user.email)
-      assert {:error, %Ecto.Changeset{}} = Accounts.create_user(params)
+      assert {:error, changeset} = Accounts.create_user(params)
+      assert "has already been taken" in errors_on(changeset).email
     end
 
     test "update_user/2 with valid data updates the user" do
@@ -66,6 +68,21 @@ defmodule Dml.AccountsTest do
     test "change_user/1 returns a user changeset" do
       user = user_fixture()
       assert %Ecto.Changeset{} = Accounts.change_user(user)
+    end
+
+    test "sign_in_user/2 with valid credentials" do
+      user = user_fixture()
+      assert {:ok, _token, %{"sub" => id}} = Accounts.sign_in_user(user.email, user.password)
+      assert id == user.id
+    end
+
+    test "sign_in_user/2 with invalid password" do
+      user = user_fixture()
+      assert {:error, :unauthorized} = Accounts.sign_in_user(user.email, "wrong")
+    end
+
+    test "sign_in_user/2 with invalid email" do
+      assert {:error, :unauthorized} = Accounts.sign_in_user("wrong", "wrong")
     end
   end
 end
