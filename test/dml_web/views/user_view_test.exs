@@ -32,9 +32,10 @@ defmodule DmlWeb.UserViewTest do
   end
 
   test "jwt.json" do
+    user = insert(:user)
     token = "123"
-    rendered_token = UserView.render("jwt.json", %{jwt: token})
+    rendered_token = UserView.render("jwt.json", %{jwt: token, user: user})
 
-    assert rendered_token == %{jwt: token}
+    assert rendered_token == %{jwt: token} |> Enum.into(user_json(user))
   end
 end
