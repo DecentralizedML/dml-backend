@@ -17,3 +17,6 @@ config :dml, Dml.Repo,
   database: "dml_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+# Reduce bcrypt rounds
+config :bcrypt_elixir, :log_rounds, 1
