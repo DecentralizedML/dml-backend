@@ -46,7 +46,8 @@ defmodule Dml.Mixfile do
       {:guardian, "~> 1.0"},
       {:credo, "~> 0.9.3", only: [:dev, :test], runtime: false},
       {:ex_machina, "~> 2.2", only: :test},
-      {:excoveralls, "~> 0.9", only: :test}
+      {:excoveralls, "~> 0.9", only: :test},
+      {:faker, "~> 0.10", only: :test}
     ]
   end
 
