@@ -8,6 +8,9 @@ defmodule Dml.Accounts.User do
 
   schema "users" do
     field :email, :string
+    field :first_name, :string
+    field :last_name, :string
+    field :bio, :string, null: true
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
     field :password_hash, :string
@@ -19,7 +22,7 @@ defmodule Dml.Accounts.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:email, :password, :password_confirmation])
+    |> cast(attrs, [:email, :first_name, :last_name, :password, :password_confirmation])
     |> validate_required([:email, :password, :password_confirmation])
     |> validate_format(:email, ~r/@/)
     |> validate_length(:password, min: 8)
