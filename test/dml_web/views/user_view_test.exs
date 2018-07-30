@@ -13,6 +13,8 @@ defmodule DmlWeb.UserViewTest do
     assert rendered_user == %{
       id: user.id,
       email: user.email,
+      first_name: user.first_name,
+      last_name: user.last_name,
       wallet_address: user.wallet_address
     }
   end

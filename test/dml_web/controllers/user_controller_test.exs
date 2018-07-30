@@ -2,9 +2,10 @@ defmodule DmlWeb.UserControllerTest do
   use DmlWeb.ConnCase
 
   alias Dml.Accounts
+  alias Dml.Accounts.User
   alias Dml.Guardian
+  alias Dml.Guardian.Plug
   alias DmlWeb.UserView
-  # alias Dml.Accounts.User
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
@@ -62,36 +63,35 @@ defmodule DmlWeb.UserControllerTest do
     end
   end
 
-  # describe "update user" do
-  #   setup [:create_user]
+  describe "update user" do
+    setup do
+      %{user: insert(:user)}
+    end
 
-  #   test "renders user when data is valid", %{conn: conn, user: %User{id: id} = user} do
-  #     conn = put conn, user_path(conn, :update, user), user: @update_attrs
-  #     assert %{"id" => ^id} = json_response(conn, 200)["data"]
+    test "renders user when data is valid", %{conn: conn, user: %User{id: id} = user} do
+      conn = Plug.sign_in(conn, user)
 
-  #     conn = get conn, user_path(conn, :show, id)
-  #     assert json_response(conn, 200)["data"] == %{
-  #       "id" => id,
-  #       "email" => "some updated email",
-  #       "password_hash" => "some updated password_hash",
-  #       "wallet_address" => "some updated wallet_address"}
-  #   end
+      params = params_for(:user)
+      conn = put(conn, user_path(conn, :update), user: params)
+      assert %{"id" => ^id} = json_response(conn, 200)
 
-  #   test "renders errors when data is invalid", %{conn: conn, user: user} do
-  #     conn = put conn, user_path(conn, :update, user), user: @invalid_attrs
-  #     assert json_response(conn, 422)["errors"] != %{}
-  #   end
-  # end
+      user = Accounts.get_user!(id)
+      conn = get conn, user_path(conn, :show, id)
+      assert json_response(conn, 200) == render_json(UserView, "show.json", user: user)
+      assert json_response(conn, 200)["email"] == params[:email]
+    end
 
-  # describe "delete user" do
-  #   setup [:create_user]
+    test "renders errors when data is invalid", %{conn: conn, user: user} do
+      conn = Plug.sign_in(conn, user)
+      params = params_for(:user, %{email: "wrong"})
+      conn = put conn, user_path(conn, :update), user: params
+      assert json_response(conn, 422)["errors"] != %{}
+    end
 
-  #   test "deletes chosen user", %{conn: conn, user: user} do
-  #     conn = delete conn, user_path(conn, :delete, user)
-  #     assert response(conn, 204)
-  #     assert_error_sent 404, fn ->
-  #       get conn, user_path(conn, :show, user)
-  #     end
-  #   end
-  # end
+    test "renders errors when data is valid & user is not authenticated", %{conn: conn, user: _user} do
+      params = params_for(:user)
+      conn = put conn, user_path(conn, :update), user: params
+      assert json_response(conn, 401)["errors"]["detail"] == "Unauthorized"
+    end
+  end
 end
