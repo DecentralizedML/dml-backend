@@ -1,0 +1,9 @@
+{
+  "skip_files": [
+    "lib/dml/repo.ex",
+    "lib/dml_web/channels",
+    "lib/dml_web/gettext.ex",
+    "lib/dml_web/auth_pipeline.ex",
+    "test/support/channel_case.ex"
+  ]
+}
