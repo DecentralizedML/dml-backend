@@ -24,5 +24,5 @@ defmodule DmlWeb.FallbackController do
     |> render(DmlWeb.ErrorView, :"401")
   end
 
-  def auth_error(conn, {type, _reason}, _opts), do: call(conn, {:error, :unauthorized})
+  def auth_error(conn, {_type, _reason}, _opts), do: call(conn, {:error, :unauthorized})
 end

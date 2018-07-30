@@ -71,7 +71,7 @@ defmodule DmlWeb.UserControllerTest do
     test "renders user when data is valid", %{conn: conn, user: %User{id: id} = user} do
       conn = Plug.sign_in(conn, user)
 
-      params = params_for(:user)
+      params = params_for(:user) |> Map.take([:email, :first_name, :last_name])
       conn = put(conn, user_path(conn, :update), user: params)
       assert %{"id" => ^id} = json_response(conn, 200)
 

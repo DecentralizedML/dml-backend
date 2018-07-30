@@ -20,10 +20,19 @@ defmodule Dml.Accounts.User do
   end
 
   @doc false
+  def create_changeset(user, attrs) do
+    user
+    |> changeset(attrs)
+    |> validate_required([:email, :password, :password_confirmation])
+  end
+
+  @doc false
+  def update_changeset(user, attrs), do: changeset(user, attrs)
+
+  @doc false
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:email, :first_name, :last_name, :password, :password_confirmation])
-    |> validate_required([:email, :password, :password_confirmation])
     |> validate_format(:email, ~r/@/)
     |> validate_length(:password, min: 8)
     |> validate_confirmation(:password)
