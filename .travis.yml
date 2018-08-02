@@ -1,0 +1,25 @@
+language: elixir
+elixir: '1.6.6'
+otp_release: '21.0'
+
+services:
+  - postgresql
+
+addons:
+  postgresql: "9.6"
+
+cache:
+  directories:
+    - _build
+    - deps
+
+before_script:
+  # - cp config/travis.exs config/test.exs
+  - mix ecto.setup
+
+script:
+  - mix test
+  - mix credo
+
+notifications:
+  email: false
