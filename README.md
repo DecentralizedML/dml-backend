@@ -1,5 +1,7 @@
 # DML Marketplace - Backend API
 
+[![Build Status](https://travis-ci.org/DecentralizedML/dml-backend.svg?branch=master)](https://travis-ci.org/DecentralizedML/dml-backend)
+
 Backend API for the [Decentralized Machine Learning][dml] project.
 
 ## Getting Started
