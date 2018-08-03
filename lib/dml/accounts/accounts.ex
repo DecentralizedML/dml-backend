@@ -127,6 +127,7 @@ defmodule Dml.Accounts do
       nil ->
         dummy_checkpw()
         {:error, "Login error."}
+
       user ->
         {:ok, user}
     end

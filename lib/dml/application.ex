@@ -12,7 +12,7 @@ defmodule Dml.Application do
       # Start the Ecto repository
       supervisor(Dml.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(DmlWeb.Endpoint, []),
+      supervisor(DmlWeb.Endpoint, [])
       # Start your own worker by calling: Dml.Worker.start_link(arg1, arg2, arg3)
       # worker(Dml.Worker, [arg1, arg2, arg3]),
     ]

@@ -6,7 +6,7 @@ defmodule DmlWeb.UserController do
   alias Dml.Guardian
   alias Dml.Guardian.Plug
 
-  action_fallback DmlWeb.FallbackController
+  action_fallback(DmlWeb.FallbackController)
 
   def index(conn, _params) do
     users = Accounts.list_users()
@@ -33,7 +33,9 @@ defmodule DmlWeb.UserController do
       {:ok, token, claims} ->
         {:ok, user} = Guardian.resource_from_claims(claims)
         conn |> render("jwt.json", user: user, jwt: token)
-      _ -> {:error, :unauthorized}
+
+      _ ->
+        {:error, :unauthorized}
     end
   end
 

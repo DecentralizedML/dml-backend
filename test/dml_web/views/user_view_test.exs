@@ -11,12 +11,12 @@ defmodule DmlWeb.UserViewTest do
     rendered_user = user_json(user)
 
     assert rendered_user == %{
-      id: user.id,
-      email: user.email,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      wallet_address: user.wallet_address
-    }
+             id: user.id,
+             email: user.email,
+             first_name: user.first_name,
+             last_name: user.last_name,
+             wallet_address: user.wallet_address
+           }
   end
 
   test "index.json" do

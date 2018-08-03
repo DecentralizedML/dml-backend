@@ -7,14 +7,14 @@ defmodule Dml.Accounts.User do
   @derive {Phoenix.Param, key: :id}
 
   schema "users" do
-    field :email, :string
-    field :first_name, :string
-    field :last_name, :string
-    field :bio, :string, null: true
-    field :password, :string, virtual: true
-    field :password_confirmation, :string, virtual: true
-    field :password_hash, :string
-    field :wallet_address, :string
+    field(:email, :string)
+    field(:first_name, :string)
+    field(:last_name, :string)
+    field(:bio, :string, null: true)
+    field(:password, :string, virtual: true)
+    field(:password_confirmation, :string, virtual: true)
+    field(:password_hash, :string)
+    field(:wallet_address, :string)
 
     timestamps()
   end
@@ -42,9 +42,11 @@ defmodule Dml.Accounts.User do
 
   defp put_password_hash(changeset) do
     case changeset do
-      %Ecto.Changeset{valid?: true, changes: %{password: pass}}
-        -> put_change(changeset, :password_hash, hashpwsalt(pass))
-      _ -> changeset
+      %Ecto.Changeset{valid?: true, changes: %{password: pass}} ->
+        put_change(changeset, :password_hash, hashpwsalt(pass))
+
+      _ ->
+        changeset
     end
   end
 end

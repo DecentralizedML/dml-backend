@@ -4,6 +4,6 @@ defmodule Dml.RenderJsonHelper do
   end
 
   defp format_json(data) do
-   data |> Poison.encode! |> Poison.decode!
- end
+    data |> Poison.encode!() |> Poison.decode!()
+  end
 end
