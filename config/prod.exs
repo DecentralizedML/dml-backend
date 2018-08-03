@@ -21,6 +21,11 @@ config :dml, DmlWeb.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
+# Guardian config
+config :dml, Dml.Guardian,
+  issuer: "DML",
+  secret_key: System.get_env("GUARDIAN_SECRET_KEY")
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

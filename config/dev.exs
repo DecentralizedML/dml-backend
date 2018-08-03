@@ -44,3 +44,8 @@ config :dml, Dml.Repo,
   database: "dml_dev",
   hostname: "localhost",
   pool_size: 10
+
+# Guardian config
+config :dml, Dml.Guardian,
+  issuer: "DML",
+  secret_key: "u49DGdIfepFS21VX6A30S7K32KZOvm54SL/AsvCuSSN1UJM4K6fMR8ImEkmAqcJ5"
