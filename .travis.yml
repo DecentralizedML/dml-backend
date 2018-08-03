@@ -14,7 +14,6 @@ cache:
     - deps
 
 before_script:
-  # - cp config/travis.exs config/test.exs
   - mix ecto.setup
 
 script:
@@ -23,3 +22,5 @@ script:
 
 notifications:
   email: false
+  slack:
+    secure: YjeW5f93n6wgBLktNRdu63T9Scd4202KhlrUhQpOonSYKthmqPDyXHf3pDGYJek/v7VAE0ywC/FYXALClA0H8HhMJK7Vu+6xWdyWWZ1lfSYyC59QcoCBAlqVbcgPFh6zKKf1H+Cr93GKikvSoaoCYSjinJvdi/aogTDdiLJgOT1ZQ6quAX7Nv9pT4a9ZylXn1sI4O9qpF/5LwMboqrfAJwNaB+7dj23DuEsMihoI9uXNlhASQloeeOoWI08AOfBtEKVxdAPyZinilaJIg14ibfvCdZyEenBBPP2cry8ywmjd6g8+9aW86kJezTFX9BdFemknxt0lhpH65c+UtHTH/d7h3j8GwbmbOCEf+VC5ohp/BGmfw1f9A4Gg+jOhnzkd2OKn/eVXyJCSv+n/2vTmuALf6tg4xL/dQoP/B4UlYqZCV0U+crCoSFWPmAaVAAXRbN1NGlxvzq2OYZQNnoA55e6EUVt8nj+9IJMoEWU0OhbGwz3+mez/rIO98eTDoXjOg6wmQ7ZgNcvUR9HVRj7gi39joU/i/HAQ5FFSK8UaKf5Iv+eCUy3j6cSWqtHeaFdk86JctFNkkt1rtPLW4lNjVG+MupCVmmWLiv0w8srt8MUnNQmuscojs9wQ/ou1LSPSaMGsOtmr6Y5zUjLa9zgBCS6OpPEpL8bw1dIB8x07aSU=
