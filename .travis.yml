@@ -19,6 +19,7 @@ before_script:
 script:
   - mix test
   - mix credo
+  - mix sobelow --compact -i Config.HTTPS --ignore-files config/*.secret.exs
 
 notifications:
   email: false
