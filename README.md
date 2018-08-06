@@ -8,7 +8,7 @@ Backend API for the [Decentralized Machine Learning][dml] project.
 
 ### Dependencies
 
-* Elixir **1.6.6**
+* Elixir **1.7.2**
 * PostgreSQL **10**
 
 ### Setup
