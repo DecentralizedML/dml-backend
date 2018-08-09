@@ -35,7 +35,7 @@ defmodule Dml.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.3.3"},
+      {:phoenix, "~> 1.3"},
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_ecto, "~> 3.2"},
       {:postgrex, ">= 0.0.0"},
@@ -44,8 +44,8 @@ defmodule Dml.Mixfile do
       {:comeonin, "~> 4.1"},
       {:bcrypt_elixir, "~> 1.0"},
       {:guardian, "~> 1.0"},
-      {:credo, "~> 0.10.0", only: [:dev, :test], runtime: false},
-      {:sobelow, "~> 0.7.1", only: [:dev, :test], runtime: false},
+      {:credo, "~> 0.10", only: [:dev, :test], runtime: false},
+      {:sobelow, "~> 0.7", only: [:dev, :test], runtime: false},
       {:ex_machina, "~> 2.2", only: :test},
       {:excoveralls, "~> 0.9", only: :test},
       {:faker, "~> 0.10", only: :test}
