@@ -12,12 +12,15 @@ defmodule Dml.AccountsTest do
 
     test "list_users/0 returns all users" do
       user = insert(:user)
-      assert Accounts.list_users() == [%{user | password: nil, password_confirmation: nil}]
+      users = Accounts.list_users()
+
+      assert Enum.count(users) == 1
+      assert has_element_by_id(users, %{id: user.id})
     end
 
     test "get_user!/1 returns the user with given id" do
       user = insert(:user)
-      assert Accounts.get_user!(user.id) == %{user | password: nil, password_confirmation: nil}
+      assert Accounts.get_user!(user.id).id == user.id
     end
 
     test "create_user/1 with valid data creates a user" do
@@ -48,7 +51,6 @@ defmodule Dml.AccountsTest do
     test "update_user/2 with invalid data returns error changeset" do
       user = insert(:user)
       assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs)
-      assert Accounts.get_user!(user.id) == %{user | password: nil, password_confirmation: nil}
     end
 
     test "delete_user/1 deletes the user" do

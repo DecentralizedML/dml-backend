@@ -13,8 +13,8 @@ defmodule Dml.DataCase do
   """
 
   use ExUnit.CaseTemplate
-  alias Dml.Changeset
   alias Ecto.Adapters.SQL.Sandbox
+  alias Ecto.Changeset
 
   using do
     quote do
@@ -25,6 +25,7 @@ defmodule Dml.DataCase do
       import Ecto.Query
       import Dml.DataCase
       import Dml.Factory
+      import Dml.EctoHelper
     end
   end
 
@@ -47,7 +48,7 @@ defmodule Dml.DataCase do
 
   """
   def errors_on(changeset) do
-    Ecto.Changeset.traverse_errors(changeset, fn {message, opts} ->
+    Changeset.traverse_errors(changeset, fn {message, opts} ->
       Enum.reduce(opts, message, fn {key, value}, acc ->
         String.replace(acc, "%{#{key}}", to_string(value))
       end)
