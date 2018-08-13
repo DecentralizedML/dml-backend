@@ -17,13 +17,16 @@ defmodule Dml.Accounts.User do
     field(:wallet_address, :string)
 
     timestamps()
+
+    # Associations
+    has_many(:bounties, Dml.Marketplace.Bounty, foreign_key: :owner_id)
   end
 
   @doc false
   def create_changeset(user, attrs) do
     user
     |> changeset(attrs)
-    |> validate_required([:email, :password, :password_confirmation])
+    |> validate_required([:email, :password, :password_confirmation], trim: true)
   end
 
   @doc false
