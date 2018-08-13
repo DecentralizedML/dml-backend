@@ -12,7 +12,7 @@ defmodule Dml.Mixfile do
       aliases: aliases(),
       deps: deps(),
       test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [coveralls: :test, coverage: :test]
+      preferred_cli_env: [coveralls: :test, coverage: :test, check: :test]
     ]
   end
 
@@ -63,6 +63,7 @@ defmodule Dml.Mixfile do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate", "test"],
+      check: ["test", "credo", "sobelow --compact --quiet -i Config.HTTPS --ignore-files config/prod.secret.exs"],
       coverage: ["coveralls.html", &open_coverage_report/1]
     ]
   end

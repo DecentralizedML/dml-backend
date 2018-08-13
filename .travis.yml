@@ -17,9 +17,7 @@ before_script:
   - mix ecto.setup
 
 script:
-  - mix test
-  - mix credo
-  - mix sobelow --compact -i Config.HTTPS --ignore-files config/*.secret.exs
+  - mix check
 
 notifications:
   email: false
