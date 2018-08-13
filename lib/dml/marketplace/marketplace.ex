@@ -23,6 +23,10 @@ defmodule Dml.Marketplace do
     Bounty |> Repo.all() |> Repo.preload(:owner)
   end
 
+  def list_bounties_from_user(user) do
+    Bounty |> where([b], b.owner_id == ^user.id) |> Repo.all()
+  end
+
   @doc """
   Gets a single bounty.
 

@@ -12,6 +12,12 @@ defmodule DmlWeb.BountyController do
     render(conn, "index.json", bounties: bounties)
   end
 
+  def mine(conn, _params) do
+    user = Plug.current_resource(conn)
+    bounties = Marketplace.list_bounties_from_user(user)
+    render(conn, "index.json", bounties: bounties)
+  end
+
   def create(conn, %{"bounty" => bounty_params}) do
     with user <- Plug.current_resource(conn),
          {:ok, %Bounty{} = bounty} <- Marketplace.create_bounty(user.id, bounty_params),

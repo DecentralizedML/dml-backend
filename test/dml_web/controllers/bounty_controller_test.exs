@@ -23,6 +23,23 @@ defmodule DmlWeb.BountyControllerTest do
     end
   end
 
+  describe "mine" do
+    @tag :authenticated
+    test "lists my bounties", %{conn: conn, user: user} do
+      my_bounty = insert(:bounty, owner: user)
+      _other_bounty = insert(:bounty)
+
+      conn = get(conn, bounty_path(conn, :mine))
+
+      assert json_response(conn, 200) == render_json(BountyView, "index.json", bounties: [%{my_bounty | owner: nil}])
+    end
+
+    test "renders errors when unauthenticated", %{conn: conn} do
+      conn = get(conn, bounty_path(conn, :mine))
+      assert json_response(conn, 401)["errors"]["detail"] == "Unauthorized"
+    end
+  end
+
   describe "create bounty" do
     @tag :authenticated
     test "renders bounty when data is valid", %{conn: conn, user: user} do
