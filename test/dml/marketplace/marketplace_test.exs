@@ -25,12 +25,15 @@ defmodule Dml.MarketplaceTest do
     end
 
     test "create_bounty/1 with valid data creates a bounty" do
-      assert {:ok, %Bounty{} = bounty} = Marketplace.create_bounty(@valid_attrs)
+      user = insert(:user)
+      assert {:ok, %Bounty{} = bounty} = Marketplace.create_bounty(user.id, @valid_attrs)
       assert bounty.name == @valid_attrs[:name]
+      assert bounty.owner_id == user.id
     end
 
     test "create_bounty/1 with invalid data returns error changeset" do
-      assert {:error, changeset} = Marketplace.create_bounty(@invalid_attrs)
+      user = insert(:user)
+      assert {:error, changeset} = Marketplace.create_bounty(user, @invalid_attrs)
       assert "can't be blank" in errors_on(changeset).name
     end
 
@@ -44,12 +47,6 @@ defmodule Dml.MarketplaceTest do
     test "update_bounty/2 with invalid data returns error changeset" do
       bounty = insert(:bounty)
       assert {:error, %Ecto.Changeset{}} = Marketplace.update_bounty(bounty, @invalid_attrs)
-    end
-
-    test "delete_bounty/1 deletes the bounty" do
-      bounty = insert(:bounty)
-      assert {:ok, %Bounty{}} = Marketplace.delete_bounty(bounty)
-      assert_raise Ecto.NoResultsError, fn -> Marketplace.get_bounty!(bounty.id) end
     end
 
     test "change_bounty/1 returns a bounty changeset" do
