@@ -40,17 +40,10 @@ defmodule DmlWeb.UserController do
   end
 
   def update(conn, %{"user" => user_params}) do
-    user = Plug.current_resource(conn)
-
-    with {:ok, %User{} = user} <- Accounts.update_user(user, user_params) do
+    with user <- Plug.current_resource(conn),
+         :ok <- Bodyguard.permit(Accounts, :update_user, user, user),
+         {:ok, %User{} = user} <- Accounts.update_user(user, user_params) do
       render(conn, "show.json", user: user)
     end
   end
-
-  # def delete(conn, %{"id" => id}) do
-  #   user = Accounts.get_user!(id)
-  #   with {:ok, %User{}} <- Accounts.delete_user(user) do
-  #     send_resp(conn, :no_content, "")
-  #   end
-  # end
 end

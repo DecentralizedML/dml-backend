@@ -1,4 +1,6 @@
 defmodule Dml.Accounts do
+  @behaviour Bodyguard.Policy
+
   @moduledoc """
   The Accounts context.
   """
@@ -75,22 +77,6 @@ defmodule Dml.Accounts do
   end
 
   @doc """
-  Deletes a User.
-
-  ## Examples
-
-      iex> delete_user(user)
-      {:ok, %User{}}
-
-      iex> delete_user(user)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_user(%User{} = user) do
-    Repo.delete(user)
-  end
-
-  @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
 
   ## Examples
@@ -132,4 +118,7 @@ defmodule Dml.Accounts do
         {:ok, user}
     end
   end
+
+  def authorize(:update_user, %User{id: id}, %User{id: id}), do: true
+  def authorize(_, _, _), do: false
 end

@@ -45,8 +45,7 @@ defmodule DmlWeb.UserControllerTest do
       params = params_for(:user)
       {:ok, user} = Accounts.create_user(params)
 
-      conn =
-        post(conn, user_path(conn, :authenticate), email: user.email, password: user.password)
+      conn = post(conn, user_path(conn, :authenticate), email: user.email, password: user.password)
 
       assert %{"jwt" => token} = json_response(conn, 200)
 
