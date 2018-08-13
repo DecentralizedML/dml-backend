@@ -4,7 +4,6 @@ defmodule DmlWeb.UserControllerTest do
   alias Dml.Accounts
   alias Dml.Accounts.User
   alias Dml.Guardian
-  alias Dml.Guardian.Plug
   alias DmlWeb.UserView
 
   setup %{conn: conn} do
@@ -65,13 +64,8 @@ defmodule DmlWeb.UserControllerTest do
   end
 
   describe "update user" do
-    setup do
-      %{user: insert(:user)}
-    end
-
-    test "renders user when data is valid", %{conn: conn, user: %User{id: id} = user} do
-      conn = Plug.sign_in(conn, user)
-
+    @tag :authenticated
+    test "renders user when data is valid", %{conn: conn, user: %User{id: id} = _user} do
       params = params_for(:user) |> Map.take([:email, :first_name, :last_name])
       conn = put(conn, user_path(conn, :update), user: params)
       assert %{"id" => ^id} = json_response(conn, 200)
@@ -82,17 +76,14 @@ defmodule DmlWeb.UserControllerTest do
       assert json_response(conn, 200)["email"] == params[:email]
     end
 
-    test "renders errors when data is invalid", %{conn: conn, user: user} do
-      conn = Plug.sign_in(conn, user)
+    @tag :authenticated
+    test "renders errors when data is invalid", %{conn: conn} do
       params = params_for(:user, %{email: "wrong"})
       conn = put(conn, user_path(conn, :update), user: params)
       assert json_response(conn, 422)["errors"] != %{}
     end
 
-    test "renders errors when data is valid & user is not authenticated", %{
-      conn: conn,
-      user: _user
-    } do
+    test "renders errors when data is valid & user is not authenticated", %{conn: conn} do
       params = params_for(:user)
       conn = put(conn, user_path(conn, :update), user: params)
       assert json_response(conn, 401)["errors"]["detail"] == "Unauthorized"

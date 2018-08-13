@@ -17,13 +17,17 @@ defmodule DmlWeb.ConnCase do
   alias Ecto.Adapters.SQL.Sandbox
   alias Phoenix.ConnTest
 
+  alias Dml.Factory
+  alias Dml.Guardian.Plug
+
   using do
     quote do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
       import DmlWeb.Router.Helpers
-      import Dml.Factory
       import Dml.RenderJsonHelper
+      import Dml.Factory
+      alias Dml.Guardian.Plug
 
       # The default endpoint for testing
       @endpoint DmlWeb.Endpoint
@@ -37,6 +41,13 @@ defmodule DmlWeb.ConnCase do
       Sandbox.mode(Dml.Repo, {:shared, self()})
     end
 
-    {:ok, conn: ConnTest.build_conn()}
+    if tags[:authenticated] do
+      # Creates & authenticates user
+      user = Factory.insert(:user)
+      conn = Plug.sign_in(ConnTest.build_conn(), user)
+      {:ok, conn: conn, user: user}
+    else
+      {:ok, conn: ConnTest.build_conn()}
+    end
   end
 end
