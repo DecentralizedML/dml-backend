@@ -1,9 +1,12 @@
 defmodule Dml.Marketplace do
+  @behaviour Bodyguard.Policy
+
   @moduledoc """
   The Marketplace context.
   """
 
   import Ecto.Query, warn: false
+  alias Dml.Accounts.User
   alias Dml.Marketplace.Bounty
   alias Dml.Repo
 
@@ -17,7 +20,7 @@ defmodule Dml.Marketplace do
 
   """
   def list_bounties do
-    Repo.all(Bounty)
+    Bounty |> Repo.all() |> Repo.preload(:owner)
   end
 
   @doc """
@@ -34,22 +37,22 @@ defmodule Dml.Marketplace do
       ** (Ecto.NoResultsError)
 
   """
-  def get_bounty!(id), do: Repo.get!(Bounty, id)
+  def get_bounty!(id), do: Bounty |> Repo.get!(id) |> Repo.preload(:owner)
 
   @doc """
   Creates a bounty.
 
   ## Examples
 
-      iex> create_bounty(%{field: value})
+      iex> create_bounty(user, %{field: value})
       {:ok, %Bounty{}}
 
-      iex> create_bounty(%{field: bad_value})
+      iex> create_bounty(user, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_bounty(attrs \\ %{}) do
-    %Bounty{}
+  def create_bounty(user_id, attrs \\ %{}) do
+    %Bounty{owner_id: user_id}
     |> Bounty.changeset(attrs)
     |> Repo.insert()
   end
@@ -73,22 +76,6 @@ defmodule Dml.Marketplace do
   end
 
   @doc """
-  Deletes a Bounty.
-
-  ## Examples
-
-      iex> delete_bounty(bounty)
-      {:ok, %Bounty{}}
-
-      iex> delete_bounty(bounty)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_bounty(%Bounty{} = bounty) do
-    Repo.delete(bounty)
-  end
-
-  @doc """
   Returns an `%Ecto.Changeset{}` for tracking bounty changes.
 
   ## Examples
@@ -100,4 +87,7 @@ defmodule Dml.Marketplace do
   def change_bounty(%Bounty{} = bounty) do
     Bounty.changeset(bounty, %{})
   end
+
+  def authorize(:update_bounty, %User{id: user_id}, %Bounty{owner_id: user_id}), do: true
+  def authorize(_, _, _), do: false
 end

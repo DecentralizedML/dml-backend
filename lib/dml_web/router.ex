@@ -20,6 +20,7 @@ defmodule DmlWeb.Router do
   scope "/api", DmlWeb do
     pipe_through([:api, :jwt_authenticated])
 
+    resources("/bounties", BountyController, only: [:index, :create, :show, :update])
     put("/users", UserController, :update)
   end
 end
