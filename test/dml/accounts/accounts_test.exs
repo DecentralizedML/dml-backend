@@ -53,12 +53,6 @@ defmodule Dml.AccountsTest do
       assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs)
     end
 
-    test "delete_user/1 deletes the user" do
-      user = insert(:user)
-      assert {:ok, %User{}} = Accounts.delete_user(user)
-      assert_raise Ecto.NoResultsError, fn -> Accounts.get_user!(user.id) end
-    end
-
     test "change_user/1 returns a user changeset" do
       user = insert(:user)
       assert %Ecto.Changeset{} = Accounts.change_user(user)
