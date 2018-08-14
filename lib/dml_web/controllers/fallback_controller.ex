@@ -24,5 +24,11 @@ defmodule DmlWeb.FallbackController do
     |> render(DmlWeb.ErrorView, :"401")
   end
 
+  def call(conn, {:error, _message}) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> render(DmlWeb.ErrorView, :"403")
+  end
+
   def auth_error(conn, {_type, _reason}, _opts), do: call(conn, {:error, :unauthorized})
 end

@@ -21,7 +21,12 @@ defmodule DmlWeb.Router do
     pipe_through([:api, :jwt_authenticated])
 
     get("/bounties/mine", BountyController, :mine)
-    resources("/bounties", BountyController, only: [:index, :create, :show, :update])
+
+    resources("/bounties", BountyController, only: [:index, :create, :show, :update]) do
+      put("/open", BountyController, :open)
+      put("/close", BountyController, :close)
+      put("/finish", BountyController, :finish)
+    end
 
     put("/users", UserController, :update)
   end

@@ -101,4 +101,96 @@ defmodule DmlWeb.BountyControllerTest do
       assert json_response(conn, 401)["errors"]["detail"] == "Unauthorized"
     end
   end
+
+  describe "open bounty" do
+    @tag :authenticated
+    test "renders bounty when transition is valid", %{conn: conn, user: user} do
+      %{id: id} = bounty = insert(:bounty, owner: user)
+
+      conn = put(conn, bounty_bounty_path(conn, :open, bounty))
+      assert %{"id" => ^id} = json_response(conn, 200)
+
+      bounty = Marketplace.get_bounty!(id)
+      assert bounty.state == "open"
+    end
+
+    @tag :authenticated
+    test "renders errors when transition is invalid", %{conn: conn, user: user} do
+      bounty = insert(:bounty, owner: user, state: "finished")
+      conn = put(conn, bounty_bounty_path(conn, :open, bounty))
+      assert json_response(conn, 422)["errors"] != %{}
+    end
+
+    @tag :authenticated
+    test "renders errors when trying to update someone's bounty", %{conn: conn, user: _user} do
+      bounty = insert(:bounty)
+      conn = put(conn, bounty_bounty_path(conn, :open, bounty))
+      assert json_response(conn, 401)["errors"]["detail"] == "Unauthorized"
+    end
+
+    test "renders errors when unauthenticated", %{conn: conn} do
+      bounty = insert(:bounty)
+      conn = put(conn, bounty_bounty_path(conn, :open, bounty))
+      assert json_response(conn, 401)["errors"]["detail"] == "Unauthorized"
+    end
+  end
+
+  describe "close bounty" do
+    @tag :authenticated
+    test "renders bounty when transition is valid", %{conn: conn, user: user} do
+      %{id: id} = bounty = insert(:bounty, owner: user, state: "open")
+
+      conn = put(conn, bounty_bounty_path(conn, :close, bounty))
+      assert %{"id" => ^id} = json_response(conn, 200)
+
+      bounty = Marketplace.get_bounty!(id)
+      assert bounty.state == "closed"
+    end
+
+    @tag :authenticated
+    test "renders errors when transition is invalid", %{conn: conn, user: user} do
+      bounty = insert(:bounty, owner: user, state: "finished")
+      conn = put(conn, bounty_bounty_path(conn, :close, bounty))
+      assert json_response(conn, 422)["errors"] != %{}
+    end
+
+    @tag :authenticated
+    test "renders errors when trying to update someone's bounty", %{conn: conn, user: _user} do
+      bounty = insert(:bounty)
+      conn = put(conn, bounty_bounty_path(conn, :close, bounty))
+      assert json_response(conn, 401)["errors"]["detail"] == "Unauthorized"
+    end
+
+    test "renders errors when unauthenticated", %{conn: conn} do
+      bounty = insert(:bounty)
+      conn = put(conn, bounty_bounty_path(conn, :close, bounty))
+      assert json_response(conn, 401)["errors"]["detail"] == "Unauthorized"
+    end
+  end
+
+  describe "finish bounty" do
+    @tag :authenticated
+    test "renders bounty when transition is valid", %{conn: conn, user: user} do
+      %{id: id} = bounty = insert(:bounty, owner: user, state: "closed")
+
+      conn = put(conn, bounty_bounty_path(conn, :finish, bounty))
+      assert %{"id" => ^id} = json_response(conn, 200)
+
+      bounty = Marketplace.get_bounty!(id)
+      assert bounty.state == "finished"
+    end
+
+    @tag :authenticated
+    test "renders errors when trying to update someone's bounty", %{conn: conn, user: _user} do
+      bounty = insert(:bounty)
+      conn = put(conn, bounty_bounty_path(conn, :finish, bounty))
+      assert json_response(conn, 401)["errors"]["detail"] == "Unauthorized"
+    end
+
+    test "renders errors when unauthenticated", %{conn: conn} do
+      bounty = insert(:bounty)
+      conn = put(conn, bounty_bounty_path(conn, :finish, bounty))
+      assert json_response(conn, 401)["errors"]["detail"] == "Unauthorized"
+    end
+  end
 end
