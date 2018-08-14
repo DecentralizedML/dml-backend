@@ -7,7 +7,7 @@ defmodule Dml.AccountsTest do
     alias Dml.Accounts.User
 
     @valid_attrs params_for(:user)
-    @update_attrs params_for(:user) |> Map.take([:email, :first_name, :last_name])
+    @update_attrs params_for(:user) |> Map.take([:first_name, :last_name])
     @invalid_attrs params_for(:user, email: "wrong")
 
     test "list_users/0 returns all users" do
@@ -50,12 +50,7 @@ defmodule Dml.AccountsTest do
 
     test "update_user/2 with invalid data returns error changeset" do
       user = insert(:user)
-      assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs)
-    end
-
-    test "change_user/1 returns a user changeset" do
-      user = insert(:user)
-      assert %Ecto.Changeset{} = Accounts.change_user(user)
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, %{first_name: ""})
     end
 
     test "sign_in_user/2 with valid credentials" do

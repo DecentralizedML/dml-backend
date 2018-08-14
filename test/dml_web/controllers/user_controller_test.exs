@@ -21,7 +21,7 @@ defmodule DmlWeb.UserControllerTest do
 
   describe "create user" do
     test "renders JWT when data is valid", %{conn: conn} do
-      params = params_for(:user)
+      params = params_for(:user) |> Map.take([:email, :password, :password_confirmation])
       conn = post(conn, user_path(conn, :create), user: params)
       assert %{"jwt" => token} = json_response(conn, 201)
 
@@ -66,19 +66,19 @@ defmodule DmlWeb.UserControllerTest do
   describe "update user" do
     @tag :authenticated
     test "renders user when data is valid", %{conn: conn, user: %User{id: id} = _user} do
-      params = params_for(:user) |> Map.take([:email, :first_name, :last_name])
+      params = params_for(:user) |> Map.take([:first_name, :last_name])
       conn = put(conn, user_path(conn, :update), user: params)
       assert %{"id" => ^id} = json_response(conn, 200)
 
       user = Accounts.get_user!(id)
       conn = get(conn, user_path(conn, :show, id))
       assert json_response(conn, 200) == render_json(UserView, "show.json", user: user)
-      assert json_response(conn, 200)["email"] == params[:email]
+      assert json_response(conn, 200)["first_name"] == params[:first_name]
     end
 
     @tag :authenticated
     test "renders errors when data is invalid", %{conn: conn} do
-      params = params_for(:user, %{email: "wrong"})
+      params = params_for(:user, %{first_name: ""})
       conn = put(conn, user_path(conn, :update), user: params)
       assert json_response(conn, 422)["errors"] != %{}
     end
