@@ -19,9 +19,23 @@ defmodule Dml.Marketplace.Bounty do
     belongs_to(:owner, Dml.Accounts.User, type: :binary_id)
   end
 
-  def changeset(bounty, attrs) do
+  def create_changeset(bounty, attrs) do
     bounty
-    |> cast(attrs, [:name, :description, :state, :start_date, :end_date, :evaluation_date])
+    |> cast(attrs, [:name, :description, :start_date, :end_date, :evaluation_date])
+    |> validate_name_and_description
+  end
+
+  def update_changeset(bounty, attrs), do: create_changeset(bounty, attrs)
+
+  def update_state_changeset(bounty, attrs) do
+    bounty
+    |> cast(attrs, [:state])
+    |> validate_required([:state])
+    |> validate_inclusion(:state, ["pending", "open", "closed", "finished"])
+  end
+
+  defp validate_name_and_description(changeset) do
+    changeset
     |> validate_required([:name, :description], trim: true)
   end
 end

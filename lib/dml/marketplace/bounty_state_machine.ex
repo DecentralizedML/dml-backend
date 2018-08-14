@@ -1,5 +1,6 @@
 defmodule Dml.Marketplace.BountyStateMachine do
-  alias Dml.Marketplace
+  alias Dml.Marketplace.Bounty
+  alias Dml.Repo
 
   use Machinery,
     states: ["pending", "open", "closed", "finished"],
@@ -10,7 +11,11 @@ defmodule Dml.Marketplace.BountyStateMachine do
     }
 
   def persist(struct, next_state) do
-    {:ok, bounty} = Marketplace.update_bounty(struct, %{state: next_state})
+    {:ok, bounty} =
+      struct
+      |> Bounty.update_state_changeset(%{state: next_state})
+      |> Repo.update()
+
     bounty
   end
 end
