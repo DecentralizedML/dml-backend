@@ -9,7 +9,7 @@ defmodule Dml.Repo.Migrations.CreateBounties do
       add(:start_date, :date, null: true)
       add(:end_date, :date, null: true)
       add(:evaluation_date, :date, null: true)
-      add(:status, :string, default: "pending")
+      add(:state, :string, default: "pending")
       add(:owner_id, references(:users, on_delete: :nothing, type: :uuid))
 
       timestamps()

@@ -21,7 +21,6 @@ defmodule Dml.Factory do
       start_date: Date.forward(7),
       end_date: Date.forward(30),
       evaluation_date: Date.forward(30),
-      status: "pending",
       owner: build(:user)
     }
   end
