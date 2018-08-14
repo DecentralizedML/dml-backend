@@ -39,8 +39,7 @@ defmodule Dml.MarketplaceTest do
 
     test "update_bounty/2 with valid data (only name) updates the bounty" do
       bounty = insert(:bounty)
-      assert {:ok, bounty} = Marketplace.update_bounty(bounty, @update_attrs)
-      assert %Bounty{} = bounty
+      assert {:ok, %Bounty{} = bounty} = Marketplace.update_bounty(bounty, @update_attrs)
       assert bounty.name == @update_attrs[:name]
     end
 
@@ -49,9 +48,13 @@ defmodule Dml.MarketplaceTest do
       assert {:error, %Ecto.Changeset{}} = Marketplace.update_bounty(bounty, @invalid_attrs)
     end
 
-    test "change_bounty/1 returns a bounty changeset" do
+    test "update_bounty_state/2 with valid state updates the bounty" do
       bounty = insert(:bounty)
-      assert %Ecto.Changeset{} = Marketplace.change_bounty(bounty)
+      assert bounty.state == "pending"
+      assert {:ok, %Bounty{} = bounty} = Marketplace.update_bounty_state(bounty, "open")
+
+      bounty = Marketplace.get_bounty!(bounty.id)
+      assert bounty.state == "open"
     end
   end
 end
