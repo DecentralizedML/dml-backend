@@ -65,6 +65,16 @@ defmodule DmlWeb.BountyControllerTest do
     end
   end
 
+  describe "show bounty" do
+    @tag :authenticated
+    test "renders bounty when data is valid", %{conn: conn} do
+      bounty = insert(:bounty)
+
+      conn = get(conn, bounty_path(conn, :show, bounty.id))
+      assert json_response(conn, 200) == render_json(BountyView, "show.json", bounty: bounty)
+    end
+  end
+
   describe "update bounty" do
     @tag :authenticated
     test "renders bounty when data is valid", %{conn: conn, user: user} do
