@@ -45,6 +45,7 @@ defmodule Dml.Mixfile do
       {:bcrypt_elixir, "~> 1.0"},
       {:guardian, "~> 1.0"},
       {:bodyguard, "~> 2.2"},
+      {:machinery, "~> 0.16"},
       {:credo, "~> 0.10", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.7", only: [:dev, :test], runtime: false},
       {:ex_machina, "~> 2.2", only: :test},
