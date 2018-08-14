@@ -11,7 +11,7 @@ defmodule Dml.Marketplace.Bounty do
     field(:start_date, :date, null: true)
     field(:end_date, :date, null: true)
     field(:evaluation_date, :date, null: true)
-    field(:status, :string, default: "pending")
+    field(:state, :string, default: "pending")
 
     timestamps()
 
@@ -21,7 +21,7 @@ defmodule Dml.Marketplace.Bounty do
 
   def changeset(bounty, attrs) do
     bounty
-    |> cast(attrs, [:name, :description, :status, :start_date, :end_date, :evaluation_date])
+    |> cast(attrs, [:name, :description, :state, :start_date, :end_date, :evaluation_date])
     |> validate_required([:name, :description], trim: true)
   end
 end
