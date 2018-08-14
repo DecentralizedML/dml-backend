@@ -22,25 +22,37 @@ defmodule Dml.Accounts.User do
     has_many(:bounties, Dml.Marketplace.Bounty, foreign_key: :owner_id)
   end
 
-  @doc false
   def create_changeset(user, attrs) do
     user
-    |> changeset(attrs)
-    |> validate_required([:email, :password, :password_confirmation], trim: true)
+    |> cast(attrs, [:email, :password, :password_confirmation])
+    |> validate_email
+    |> validate_password
   end
 
-  @doc false
-  def update_changeset(user, attrs), do: changeset(user, attrs)
-
-  @doc false
-  def changeset(user, attrs) do
+  def update_changeset(user, attrs) do
     user
-    |> cast(attrs, [:email, :first_name, :last_name, :password, :password_confirmation])
+    |> cast(attrs, [:first_name, :last_name])
+    |> validate_first_and_last_name
+  end
+
+  defp validate_email(changeset) do
+    changeset
+    |> validate_required([:email], trim: true)
     |> validate_format(:email, ~r/@/)
+    |> unique_constraint(:email)
+  end
+
+  defp validate_password(changeset) do
+    changeset
+    |> validate_required([:password, :password_confirmation])
     |> validate_length(:password, min: 8)
     |> validate_confirmation(:password)
-    |> unique_constraint(:email)
     |> put_password_hash
+  end
+
+  defp validate_first_and_last_name(changeset) do
+    changeset
+    |> validate_required([:first_name, :last_name], trim: true)
   end
 
   defp put_password_hash(changeset) do
