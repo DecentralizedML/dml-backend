@@ -23,6 +23,9 @@ defmodule DmlWeb do
       import Plug.Conn
       import DmlWeb.Router.Helpers
       import DmlWeb.Gettext
+      alias Dml.Guardian.Plug
+
+      defp current_user(conn), do: Plug.current_resource(conn)
     end
   end
 

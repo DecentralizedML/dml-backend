@@ -4,7 +4,6 @@ defmodule DmlWeb.UserController do
   alias Dml.Accounts
   alias Dml.Accounts.User
   alias Dml.Guardian
-  alias Dml.Guardian.Plug
 
   action_fallback(DmlWeb.FallbackController)
 
@@ -40,7 +39,7 @@ defmodule DmlWeb.UserController do
   end
 
   def update(conn, %{"user" => user_params}) do
-    with user <- Plug.current_resource(conn),
+    with user <- current_user(conn),
          :ok <- Bodyguard.permit(Accounts, :update_user, user, user),
          {:ok, %User{} = user} <- Accounts.update_user(user, user_params) do
       render(conn, "show.json", user: user)
