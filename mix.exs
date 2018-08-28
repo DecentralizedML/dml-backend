@@ -42,14 +42,14 @@ defmodule Dml.Mixfile do
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:comeonin, "~> 4.1"},
-      {:bcrypt_elixir, "~> 1.0"},
+      {:bcrypt_elixir, "~> 1.1"},
       {:guardian, "~> 1.0"},
       {:bodyguard, "~> 2.2"},
       {:machinery, "~> 0.16"},
       {:credo, "~> 0.10", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.7", only: [:dev, :test], runtime: false},
       {:ex_machina, "~> 2.2", only: :test},
-      {:excoveralls, "~> 0.9", only: :test},
+      {:excoveralls, "~> 0.10", only: :test},
       {:faker, "~> 0.10", only: :test}
     ]
   end
