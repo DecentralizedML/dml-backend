@@ -24,4 +24,11 @@ defmodule Dml.Factory do
       owner: build(:user)
     }
   end
+
+  def enrollment_factory do
+    %Dml.Marketplace.Enrollment{
+      user: build(:user),
+      bounty: build(:bounty)
+    }
+  end
 end

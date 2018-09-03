@@ -3,7 +3,7 @@ defmodule Dml.Marketplace do
 
   import Ecto.Query, warn: false
   alias Dml.Accounts.User
-  alias Dml.Marketplace.{Bounty, BountyStateMachine}
+  alias Dml.Marketplace.{Bounty, BountyStateMachine, Enrollment}
   alias Dml.Repo
 
   def list_bounties do
@@ -30,6 +30,18 @@ defmodule Dml.Marketplace do
 
   def update_bounty_state(%Bounty{} = bounty, state) do
     Machinery.transition_to(bounty, BountyStateMachine, state)
+  end
+
+  def list_enrollments do
+    Enrollment |> Repo.all() |> Repo.preload([:user, :bounty])
+  end
+
+  def get_enrollment!(id), do: Enrollment |> Repo.get!(id) |> Repo.preload([:user, :bounty])
+
+  def create_enrollment(user_id, bounty_id) do
+    %Enrollment{bounty_id: bounty_id, user_id: user_id}
+    |> Enrollment.create_changeset()
+    |> Repo.insert()
   end
 
   def authorize(:update_bounty, %User{id: user_id}, %Bounty{owner_id: user_id}), do: true

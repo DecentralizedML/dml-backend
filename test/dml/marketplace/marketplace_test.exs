@@ -57,4 +57,41 @@ defmodule Dml.MarketplaceTest do
       assert bounty.state == "open"
     end
   end
+
+  describe "enrollments" do
+    alias Dml.Marketplace.Enrollment
+
+    setup do
+      %{bounty: insert(:bounty)}
+    end
+
+    test "list_enrollments/0 returns all enrollments" do
+      enrollment = insert(:enrollment)
+      enrollments = Marketplace.list_enrollments()
+
+      assert Enum.count(enrollments) == 1
+      assert has_element_by_id(enrollments, %{id: enrollment.id})
+    end
+
+    test "get_enrollment!/1 returns the enrollment with given id" do
+      enrollment = insert(:enrollment)
+
+      assert Marketplace.get_enrollment!(enrollment.id).id == enrollment.id
+    end
+
+    test "create_enrollment/1 with valid data creates a enrollment", %{bounty: bounty} do
+      user = insert(:user)
+
+      assert {:ok, %Enrollment{} = enrollment} = Marketplace.create_enrollment(user.id, bounty.id)
+      assert enrollment.user_id == user.id
+      assert enrollment.bounty_id == bounty.id
+      assert enrollment.state == "pending"
+      assert enrollment.rewarded == false
+    end
+
+    test "create_enrollment/1 with invalid data returns error changeset", %{bounty: bounty} do
+      assert {:error, changeset} = Marketplace.create_enrollment(nil, bounty.id)
+      assert "can't be blank" in errors_on(changeset).user_id
+    end
+  end
 end
