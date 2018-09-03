@@ -45,5 +45,14 @@ defmodule Dml.Marketplace do
   end
 
   def authorize(:update_bounty, %User{id: user_id}, %Bounty{owner_id: user_id}), do: true
+  def authorize(:enroll, %User{id: user_id}, %Bounty{owner_id: user_id}), do: false
+
+  def authorize(:enroll, %User{} = user, %Bounty{state: "open"} = bounty) do
+    # NOTE: Enrollment is possible only once
+    Enrollment
+    |> where([e], e.user_id == ^user.id and e.bounty_id == ^bounty.id)
+    |> Repo.aggregate(:count, :id) == 0
+  end
+
   def authorize(_, _, _), do: false
 end

@@ -23,9 +23,10 @@ defmodule DmlWeb.Router do
     get("/bounties/mine", BountyController, :mine)
 
     resources("/bounties", BountyController, only: [:index, :create, :show, :update]) do
-      put("/open", BountyController, :open)
-      put("/close", BountyController, :close)
-      put("/finish", BountyController, :finish)
+      put("/open", BountyController, :open, as: "open")
+      put("/close", BountyController, :close, as: "close")
+      put("/finish", BountyController, :finish, as: "finish")
+      post("/enroll", BountyController, :enroll, as: "enroll")
     end
 
     put("/users", UserController, :update)

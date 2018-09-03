@@ -22,4 +22,16 @@ defmodule DmlWeb.BountyView do
       owner: UserView.render("user.json", %{user: bounty.owner})
     }
   end
+
+  def render("enrollment.json", %{enrollment: enrollment}) do
+    %{
+      id: enrollment.id,
+      user: UserView.render("user.json", %{user: enrollment.user}),
+      bounty: BountyView.render("bounty.json", %{bounty: enrollment.bounty}),
+      state: enrollment.state,
+      rewarded: enrollment.rewarded,
+      reward: enrollment.reward,
+      position: enrollment.position
+    }
+  end
 end

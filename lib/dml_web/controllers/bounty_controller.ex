@@ -2,7 +2,7 @@ defmodule DmlWeb.BountyController do
   use DmlWeb, :controller
 
   alias Dml.Marketplace
-  alias Dml.Marketplace.Bounty
+  alias Dml.Marketplace.{Bounty, Enrollment}
 
   action_fallback(DmlWeb.FallbackController)
 
@@ -48,6 +48,17 @@ defmodule DmlWeb.BountyController do
          :ok <- Bodyguard.permit(Marketplace, :update_bounty, current_user(conn), bounty),
          {:ok, %Bounty{} = bounty} <- Marketplace.update_bounty_state(bounty, state) do
       render(conn, "show.json", bounty: bounty)
+    end
+  end
+
+  def enroll(conn, %{"bounty_id" => bounty_id}) do
+    current_user = current_user(conn)
+
+    with bounty <- Marketplace.get_bounty!(bounty_id),
+         :ok <- Bodyguard.permit(Marketplace, :enroll, current_user, bounty),
+         {:ok, %Enrollment{} = enrollment} <- Marketplace.create_enrollment(current_user.id, bounty.id) do
+      # TODO: Find a way to make the create_enrollment() call preload the user & bounty, so we don't need to fetch it
+      render(conn, "enrollment.json", enrollment: Marketplace.get_enrollment!(enrollment.id))
     end
   end
 end
