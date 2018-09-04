@@ -18,5 +18,6 @@ defmodule Dml.Repo.Migrations.CreateEnrollments do
     create(index(:enrollments, [:user_id]))
     create(index(:enrollments, [:bounty_id]))
     # create(index(:enrollments, [:algoritm_id]))
+    create(unique_index(:enrollments, [:user_id, :bounty_id]))
   end
 end
