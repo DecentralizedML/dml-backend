@@ -31,7 +31,7 @@ defmodule DmlWeb.BountyView do
       state: enrollment.state,
       rewarded: enrollment.rewarded,
       reward: enrollment.reward,
-      position: enrollment.position
+      rank: enrollment.rank
     }
   end
 end

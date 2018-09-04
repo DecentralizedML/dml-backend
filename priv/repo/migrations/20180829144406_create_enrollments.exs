@@ -10,7 +10,7 @@ defmodule Dml.Repo.Migrations.CreateEnrollments do
       add(:state, :string, default: "pending")
       add(:rewarded, :boolean, default: false, null: false)
       add(:reward, :integer, null: true)
-      add(:position, :integer, null: true)
+      add(:rank, :integer, null: true)
 
       timestamps()
     end
