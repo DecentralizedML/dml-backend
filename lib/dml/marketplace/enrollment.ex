@@ -9,7 +9,7 @@ defmodule Dml.Marketplace.Enrollment do
     field(:state, :string, default: "pending")
     field(:reward, :integer, null: false)
     field(:rewarded, :boolean, default: false, null: false)
-    field(:position, :integer, null: false)
+    field(:rank, :integer, null: false)
 
     timestamps()
 
