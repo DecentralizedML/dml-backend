@@ -65,7 +65,11 @@ mix credo
 
 ## Deployment
 
-TODO
+#### Staging
+
+* Install [Gigalixir][gigalixir]
+* Deploy the project using `git push gigalixir master`
+* Point the front-end application to [staging][staging]
 
 ## Built With
 
@@ -81,4 +85,5 @@ TODO
 [elixir]:https://elixir-lang.org/
 [phoenix]:https://phoenixframework.org/
 [hex]:https://hex.pm/
-
+[gigalixir]:https://gigalixir.com/
+[staging]:https://elegant-brisk-indianjackal.gigalixirapp.com/
