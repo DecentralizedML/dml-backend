@@ -12,7 +12,15 @@ defmodule Dml.Mixfile do
       aliases: aliases(),
       deps: deps(),
       test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [coveralls: :test, coverage: :test, check: :test]
+      preferred_cli_env: [
+        coveralls: :test,
+        coverage: :test,
+        check: :test,
+        vcr: :test,
+        "vcr.delete": :test,
+        "vcr.check": :test,
+        "vcr.show": :test
+      ]
     ]
   end
 
@@ -51,7 +59,8 @@ defmodule Dml.Mixfile do
       {:sobelow, "~> 0.7", only: [:dev, :test], runtime: false},
       {:ex_machina, "~> 2.2", only: :test},
       {:excoveralls, "~> 0.10", only: :test},
-      {:faker, "~> 0.10", only: :test}
+      {:faker, "~> 0.10", only: :test},
+      {:exvcr, "~> 0.10", only: :test}
     ]
   end
 

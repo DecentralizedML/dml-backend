@@ -19,10 +19,31 @@ defmodule Dml.Accounts do
     |> Repo.insert()
   end
 
+  def create_user_from_oauth(attrs \\ %{}) do
+    %User{}
+    |> User.create_from_oauth_changeset(attrs)
+    |> Repo.insert()
+  end
+
   def update_user(%User{} = user, attrs) do
     user
     |> User.update_changeset(attrs)
     |> Repo.update()
+  end
+
+  def user_from_oauth("google", data \\ %{}) do
+    case Repo.get_by(User, email: data["email"], google_uid: data["sub"]) do
+      nil ->
+        create_user_from_oauth(%{
+          email: data["email"],
+          google_uid: data["sub"],
+          first_name: data["given_name"],
+          last_name: data["family_name"]
+        })
+
+      user ->
+        {:ok, user}
+    end
   end
 
   def sign_in_user(email, password) do

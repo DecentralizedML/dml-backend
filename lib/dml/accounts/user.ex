@@ -31,6 +31,12 @@ defmodule Dml.Accounts.User do
     |> validate_password
   end
 
+  def create_from_oauth_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:email, :first_name, :last_name, :google_uid, :facebook_uid])
+    |> validate_email
+  end
+
   def update_changeset(user, attrs) do
     user
     |> cast(attrs, [:first_name, :last_name])

@@ -1,0 +1,67 @@
+[
+  {
+    "request": {
+      "body": "client_id=<GOOGLE_CLIENT_ID>&client_secret=<GOOGLE_CLIENT_SECRET>&code=4%2FWACGmwPZcbhE0PZ48Uzdq_o1dwB6j_NNA4HQKEVy17BOUzABdXdYit7g78TP2HGuh1_FltHGeKmjpZWrkY-ADvc&grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A4000%2Fauth%2Fgoogle%2Fcallback",
+      "headers": {
+        "content-type": "application/x-www-form-urlencoded",
+        "accept": "application/json"
+      },
+      "method": "post",
+      "options": [],
+      "request_body": "",
+      "url": "https://accounts.google.com/o/oauth2/token"
+    },
+    "response": {
+      "binary": false,
+      "body": "{\n  \"access_token\": \"ya29.GlwWBqpqQ8DADuvCiIvwu1B2FL_TDhoZQwTH6WMs4eImSZoyRJhX8_NciM_PleEHPlnD9vk2YfsiL2wPv0nX1cgwaLMjqAMIMFnXbtHMP17KDEKMQ4PEpys8fQkTtQ\",\n  \"expires_in\": 3576,\n  \"scope\": \"https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/plus.me\",\n  \"token_type\": \"Bearer\",\n  \"id_token\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6ImQ5NjQ4ZTAzMmNhYzU4NDI0ZTBkMWE3YzAzMGEzMTk4ZDNmNDZhZGIifQ.eyJhenAiOiI0MzQyNjcxODc3NDgtcm1zaW4ybzFudDJtaTdydHFrbTQ5YjVmanUwc2lxa3QuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0MzQyNjcxODc3NDgtcm1zaW4ybzFudDJtaTdydHFrbTQ5YjVmanUwc2lxa3QuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDg3MjQ0MjIzNTU3NDc1Mjc0NjEiLCJlbWFpbCI6InRoaWFnby5iZWxlbS53ZWJAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJiejUtbXpnNzh3UlFnbHZ0WkE2ZkZBIiwiZXhwIjoxNTM2Nzk5MzA3LCJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiaWF0IjoxNTM2Nzk1NzA3fQ.iOKFY1Qj8JxjkqbTWPs7WYyjpdf1eMI_PRLg0cmtKmTH0DsJ84RSab7tyamUvA0lcCTi2otqUeA4DjXMv-odP2rKK5lESRuzG90bG4IxMRog9Wm2BB_IYGD9h-ZkdjJlrD3mrRVnNaEy7323vCqt0LgQGsb7p_CeAMFcxeR0PWzJsH_Ek33QHJcqS7N8vvyOnMSRUw7dM62_FyHvRivGjcxI2m7dqm-I1-W0kvjbkfDllVXNMfXB2o7mkfxjzQmqB3Hw36cGqrpQgVdQhGPCYX0DGmeDWls2OSU1bteOaPWdLkhKWUMJHLE1B6xa1fixxv7cz1UPBZTerAwj8pFxng\"\n}",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "Vary": "X-Origin",
+        "Date": "Wed, 12 Sep 2018 23:41:47 GMT",
+        "Server": "ESF",
+        "Cache-Control": "private",
+        "X-XSS-Protection": "1; mode=block",
+        "X-Frame-Options": "SAMEORIGIN",
+        "X-Content-Type-Options": "nosniff",
+        "Alt-Svc": "quic=\":443\"; ma=2592000; v=\"44,43,39,35\"",
+        "Accept-Ranges": "none",
+        "Transfer-Encoding": "chunked"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  },
+  {
+    "request": {
+      "body": "",
+      "headers": {
+        "accept": "application/json",
+        "authorization": "***"
+      },
+      "method": "get",
+      "options": [],
+      "request_body": "",
+      "url": "https://www.googleapis.com/plus/v1/people/me/openIdConnect"
+    },
+    "response": {
+      "binary": false,
+      "body": "{\n \"kind\": \"plus#personOpenIdConnect\",\n \"gender\": \"male\",\n \"sub\": \"108724422355747527461\",\n \"name\": \"Thiago Belem (TiuTalk)\",\n \"given_name\": \"Thiago\",\n \"family_name\": \"Belem\",\n \"profile\": \"https://plus.google.com/108724422355747527461\",\n \"picture\": \"https://lh3.googleusercontent.com/-iPgqZz0P7sA/AAAAAAAAAAI/AAAAAAAAEsw/-W6LOe_6cNM/photo.jpg?sz=50\",\n \"email\": \"thiago.belem.web@gmail.com\",\n \"email_verified\": \"true\"\n}\n",
+      "headers": {
+        "Expires": "Wed, 12 Sep 2018 23:41:47 GMT",
+        "Date": "Wed, 12 Sep 2018 23:41:47 GMT",
+        "Cache-Control": "private, max-age=0, must-revalidate, no-transform",
+        "ETag": "\"jb1Xzanox6i8Zyse4DcYD8sZqy0/rCpub6VBMxqUK_nfG-G3_AWttuY\"",
+        "Vary": "Origin",
+        "Content-Type": "application/json; charset=UTF-8",
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "SAMEORIGIN",
+        "X-XSS-Protection": "1; mode=block",
+        "Content-Length": "419",
+        "Server": "GSE",
+        "Alt-Svc": "quic=\":443\"; ma=2592000; v=\"44,43,39,35\""
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]
