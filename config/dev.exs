@@ -49,3 +49,6 @@ config :dml, Dml.Repo,
 config :dml, Dml.Guardian,
   issuer: "DML",
   secret_key: "u49DGdIfepFS21VX6A30S7K32KZOvm54SL/AsvCuSSN1UJM4K6fMR8ImEkmAqcJ5"
+
+# OAuth2
+config :oauth2, debug: true
