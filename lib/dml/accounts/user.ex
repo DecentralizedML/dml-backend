@@ -15,6 +15,8 @@ defmodule Dml.Accounts.User do
     field(:password_confirmation, :string, virtual: true)
     field(:password_hash, :string)
     field(:wallet_address, :string)
+    field(:google_uid, :string)
+    field(:facebook_uid, :string)
 
     timestamps()
 
