@@ -11,6 +11,8 @@ defmodule DmlWeb.AuthControllerTest do
     Config.filter_request_headers("authorization")
     Config.filter_sensitive_data(System.get_env("GOOGLE_CLIENT_ID"), "<GOOGLE_CLIENT_ID>")
     Config.filter_sensitive_data(System.get_env("GOOGLE_CLIENT_SECRET"), "<GOOGLE_CLIENT_SECRET>")
+    Config.filter_sensitive_data(System.get_env("FACEBOOK_APP_ID"), "<FACEBOOK_APP_ID>")
+    Config.filter_sensitive_data(System.get_env("FACEBOOK_APP_SECRET"), "<FACEBOOK_APP_SECRET>")
 
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
@@ -18,7 +20,14 @@ defmodule DmlWeb.AuthControllerTest do
   @google_auth_params %{
     "provider" => "google",
     "code" => "4/WACGmwPZcbhE0PZ48Uzdq_o1dwB6j_NNA4HQKEVy17BOUzABdXdYit7g78TP2HGuh1_FltHGeKmjpZWrkY-ADvc",
-    "uid" => "108724422355747527461"
+    "id" => "108724422355747527461"
+  }
+
+  @facebook_auth_params %{
+    "provider" => "facebook",
+    "code" =>
+      "AQA0oB7W-abxqIz6LLyzYT8HpszyiicMo85HOshLVkBZIP-55Dxo1A50HYSDskuEb4TMN9fOqskruhN_g_-fGpnAQyvBGAFRSfCVuPsbMzDgW45n9ZpJLcfX_IhYfZG2BIgSpKmQVoFuqM2pqUJE-feBVi_7MTlc2k9Saoii7sTyn44u8Ql7GS_MBAEiQ61NnClyw1rCRtJZSUoFpyIZrFSCmifQpMwBdkQVg3fDKUIXmEy45doc78Wf9_OG3PD7PRj21LR0O38barYHqGT9O0lJlNOPSMda6RSfNXaaycAGOchHVvPowcstDaNWnP8jvS_eLQBEwD-xt0hazjfziuznLVfrxlUgMLfE4F3pW4Scyg",
+    "id" => "10212443153982146"
   }
 
   describe "create user (Google)" do
@@ -38,13 +47,13 @@ defmodule DmlWeb.AuthControllerTest do
       assert user.email == "thiago.belem.web@gmail.com"
       assert user.first_name == "Thiago"
       assert user.last_name == "Belem"
-      assert user.google_uid == @google_auth_params["uid"]
+      assert user.google_uid == @google_auth_params["id"]
     end
   end
 
   describe "login user (Google)" do
     test "renders JWT when data is valid", %{conn: conn} do
-      user = insert(:user, email: "thiago.belem.web@gmail.com", google_uid: @google_auth_params["uid"])
+      user = insert(:user, email: "thiago.belem.web@gmail.com", google_uid: @google_auth_params["id"])
       id = user.id
 
       params = Map.take(@google_auth_params, ["provider", "code"])
@@ -52,6 +61,43 @@ defmodule DmlWeb.AuthControllerTest do
       conn =
         use_cassette "google_valid_oauth" do
           get(conn, auth_path(conn, :callback, "google"), params)
+        end
+
+      assert %{"jwt" => token, "id" => ^id} = json_response(conn, 201)
+    end
+  end
+
+  describe "create user (Facebook)" do
+    test "renders JWT when data is valid", %{conn: conn} do
+      params = Map.take(@facebook_auth_params, ["provider", "code"])
+
+      conn =
+        use_cassette "facebook_valid_oauth" do
+          get(conn, auth_path(conn, :callback, "facebook"), params)
+        end
+
+      assert %{"jwt" => token} = json_response(conn, 201)
+
+      {:ok, claims} = Guardian.decode_and_verify(token)
+      {:ok, user} = Guardian.resource_from_claims(claims)
+
+      assert user.email == "contato@thiagobelem.net"
+      assert user.first_name == "Thiago"
+      assert user.last_name == "Belem"
+      assert user.facebook_uid == @facebook_auth_params["id"]
+    end
+  end
+
+  describe "login user (Facebook)" do
+    test "renders JWT when data is valid", %{conn: conn} do
+      user = insert(:user, email: "contato@thiagobelem.net", facebook_uid: @facebook_auth_params["id"])
+      id = user.id
+
+      params = Map.take(@facebook_auth_params, ["provider", "code"])
+
+      conn =
+        use_cassette "facebook_valid_oauth" do
+          get(conn, auth_path(conn, :callback, "facebook"), params)
         end
 
       assert %{"jwt" => token, "id" => ^id} = json_response(conn, 201)
