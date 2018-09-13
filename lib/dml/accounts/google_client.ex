@@ -6,7 +6,6 @@ defmodule Dml.Accounts.GoogleClient do
 
   @authorization_scope "https://www.googleapis.com/auth/userinfo.email"
   @user_endpoint "https://www.googleapis.com/plus/v1/people/me/openIdConnect"
-  @user_fields ["sub", "email", "given_name", "family_name", "picture"]
 
   defp config do
     [
@@ -22,16 +21,22 @@ defmodule Dml.Accounts.GoogleClient do
 
   # Public API
 
-  def client do
-    Client.new(config())
+  def client(params \\ []) do
+    params
+    |> Keyword.merge(config())
+    |> Client.new()
   end
 
-  def authorization_url(params \\ []) do
-    Client.authorize_url!(client(), params)
+  def authorize_url!(params \\ [], opts \\ []) do
+    opts
+    |> client
+    |> Client.authorize_url!(params)
   end
 
-  def get_token(params \\ [], _headers \\ []) do
-    Client.get_token!(client(), Keyword.merge(params, client_secret: client().client_secret))
+  def get_token!(params \\ [], opts \\ []) do
+    opts
+    |> client
+    |> Client.get_token!(params)
   end
 
   # Strategy Callbacks
@@ -46,8 +51,16 @@ defmodule Dml.Accounts.GoogleClient do
     |> AuthCode.get_token(params, headers)
   end
 
-  def get_user(client, _params \\ %{}) do
-    %{body: user, status_code: _status} = Client.get!(client, @user_endpoint)
-    {:ok, Map.take(user, @user_fields)}
+  def get_user(client, _query_params \\ []) do
+    case Client.get(client, @user_endpoint) do
+      {:ok, %OAuth2.Response{status_code: 401, body: _body}} ->
+        {:error, "Unauthorized"}
+
+      {:ok, %OAuth2.Response{status_code: status_code, body: user}} when status_code in 200..399 ->
+        {:ok, user}
+
+      {:error, %OAuth2.Error{reason: reason}} ->
+        {:error, reason}
+    end
   end
 end

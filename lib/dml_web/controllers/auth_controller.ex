@@ -2,7 +2,7 @@ defmodule DmlWeb.AuthController do
   use DmlWeb, :controller
 
   alias Dml.Accounts
-  alias Dml.Accounts.{GoogleClient, User}
+  alias Dml.Accounts.{FacebookClient, GoogleClient, User}
   alias Dml.Guardian
   alias DmlWeb.UserView
 
@@ -25,12 +25,15 @@ defmodule DmlWeb.AuthController do
     end
   end
 
-  defp authorize_url("google"), do: GoogleClient.authorization_url()
+  defp authorize_url("google"), do: GoogleClient.authorize_url!()
+  defp authorize_url("facebook"), do: FacebookClient.authorize_url!()
   defp authorize_url(_), do: raise("No matching provider available")
 
-  defp get_token(code, "google"), do: GoogleClient.get_token(code: code)
+  defp get_token(code, "google"), do: GoogleClient.get_token!(code: code)
+  defp get_token(code, "facebook"), do: FacebookClient.get_token!(code: code)
   defp get_token(_, _), do: raise("No matching provider available")
 
   defp get_user(token, "google"), do: GoogleClient.get_user(token)
+  defp get_user(token, "facebook"), do: FacebookClient.get_user(token)
   defp get_user(_, _), do: raise("No matching provider available")
 end

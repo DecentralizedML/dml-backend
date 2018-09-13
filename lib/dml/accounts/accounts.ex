@@ -31,18 +31,17 @@ defmodule Dml.Accounts do
     |> Repo.update()
   end
 
-  def user_from_oauth("google", data \\ %{}) do
-    case Repo.get_by(User, email: data["email"], google_uid: data["sub"]) do
-      nil ->
-        create_user_from_oauth(%{
-          email: data["email"],
-          google_uid: data["sub"],
-          first_name: data["given_name"],
-          last_name: data["family_name"]
-        })
+  def user_from_oauth("google", %{"sub" => id, "email" => email, "given_name" => first_name, "family_name" => last_name}) do
+    case Repo.get_by(User, email: email, google_uid: id) do
+      nil -> create_user_from_oauth(%{email: email, google_uid: id, first_name: first_name, last_name: last_name})
+      user -> {:ok, user}
+    end
+  end
 
-      user ->
-        {:ok, user}
+  def user_from_oauth("facebook", %{"id" => id, "email" => email, "first_name" => first_name, "last_name" => last_name}) do
+    case Repo.get_by(User, email: email, facebook_uid: id) do
+      nil -> create_user_from_oauth(%{email: email, facebook_uid: id, first_name: first_name, last_name: last_name})
+      user -> {:ok, user}
     end
   end
 

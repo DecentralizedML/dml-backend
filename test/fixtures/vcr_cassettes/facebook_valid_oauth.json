@@ -1,0 +1,73 @@
+[
+  {
+    "request": {
+      "body": "{\"redirect_uri\":\"http://localhost:4000/auth/facebook/callback\",\"grant_type\":\"authorization_code\",\"code\":\"AQA0oB7W-abxqIz6LLyzYT8HpszyiicMo85HOshLVkBZIP-55Dxo1A50HYSDskuEb4TMN9fOqskruhN_g_-fGpnAQyvBGAFRSfCVuPsbMzDgW45n9ZpJLcfX_IhYfZG2BIgSpKmQVoFuqM2pqUJE-feBVi_7MTlc2k9Saoii7sTyn44u8Ql7GS_MBAEiQ61NnClyw1rCRtJZSUoFpyIZrFSCmifQpMwBdkQVg3fDKUIXmEy45doc78Wf9_OG3PD7PRj21LR0O38barYHqGT9O0lJlNOPSMda6RSfNXaaycAGOchHVvPowcstDaNWnP8jvS_eLQBEwD-xt0hazjfziuznLVfrxlUgMLfE4F3pW4Scyg\",\"client_secret\":\"<FACEBOOK_APP_SECRET>\",\"client_id\":\"<FACEBOOK_APP_ID>\"}",
+      "headers": {
+        "accept": "application/json"
+      },
+      "method": "get",
+      "options": [],
+      "request_body": "",
+      "url": "https://graph.facebook.com/v3.1/oauth/access_token?client_id=<FACEBOOK_APP_ID>&client_secret=<FACEBOOK_APP_SECRET>&code=AQA0oB7W-abxqIz6LLyzYT8HpszyiicMo85HOshLVkBZIP-55Dxo1A50HYSDskuEb4TMN9fOqskruhN_g_-fGpnAQyvBGAFRSfCVuPsbMzDgW45n9ZpJLcfX_IhYfZG2BIgSpKmQVoFuqM2pqUJE-feBVi_7MTlc2k9Saoii7sTyn44u8Ql7GS_MBAEiQ61NnClyw1rCRtJZSUoFpyIZrFSCmifQpMwBdkQVg3fDKUIXmEy45doc78Wf9_OG3PD7PRj21LR0O38barYHqGT9O0lJlNOPSMda6RSfNXaaycAGOchHVvPowcstDaNWnP8jvS_eLQBEwD-xt0hazjfziuznLVfrxlUgMLfE4F3pW4Scyg&grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A4000%2Fauth%2Ffacebook%2Fcallback"
+    },
+    "response": {
+      "binary": false,
+      "body": "{\"access_token\":\"EAAPpDciiy8sBAGmZCxHnn4c7qUOBARxxjrWf6hzCISU1LxBwlmyV1OvpI7KljcjpB97H5EqMrhj9hcVLelkE71a2EPhHzW3KoveiFX38tXN9pCMsH2FCyqeXt7wuKGw6pKVWoQZBfmb4hiEHbBxiZAE2wTWyPUZD\",\"token_type\":\"bearer\",\"expires_in\":5180374}",
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Pragma": "no-cache",
+        "Cache-Control": "private, no-cache, no-store, must-revalidate",
+        "facebook-api-version": "v3.1",
+        "Expires": "Sat, 01 Jan 2000 00:00:00 GMT",
+        "x-fb-rev": "4308810",
+        "Content-Type": "application/json; charset=UTF-8",
+        "x-fb-trace-id": "Fj4lpffV/i3",
+        "Strict-Transport-Security": "max-age=15552000; preload",
+        "Vary": "Accept-Encoding",
+        "X-FB-Debug": "WTYo1QFLmQCm3RAvIKthFpp99g35SWrvhl0uGU2HpXJ8H/Jah68J0Hc/ix/gkYnT68VBmhEowMApVaKurIcYqA==",
+        "Date": "Thu, 13 Sep 2018 19:22:08 GMT",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  },
+  {
+    "request": {
+      "body": "",
+      "headers": {
+        "accept": "application/json",
+        "authorization": "***"
+      },
+      "method": "get",
+      "options": [],
+      "request_body": "",
+      "url": "https://graph.facebook.com/me?appsecret_proof=0b672c9f3ca298317126dc0f0693d4f1324ee89f2a14a5ac3a93274d4f23ebdd&fields=id%2Cemail%2Cgender%2Clink%2Clocale%2Cname%2Cfirst_name%2Clast_name%2Ctimezone%2Cupdated_time%2Cverified"
+    },
+    "response": {
+      "binary": false,
+      "body": "{\"id\":\"10212443153982146\",\"email\":\"contato\\u0040thiagobelem.net\",\"name\":\"Thiago Belem\",\"first_name\":\"Thiago\",\"last_name\":\"Belem\"}",
+      "headers": {
+        "ETag": "\"222ccf2c5ac6752c2023c08aa25deb0c64f3a940\"",
+        "Strict-Transport-Security": "max-age=15552000; preload",
+        "x-fb-trace-id": "GHdI1hh8pwF",
+        "x-fb-rev": "4308810",
+        "x-app-usage": "{\"call_count\":2,\"total_cputime\":0,\"total_time\":0}",
+        "Expires": "Sat, 01 Jan 2000 00:00:00 GMT",
+        "Content-Type": "application/json",
+        "facebook-api-version": "v3.1",
+        "Cache-Control": "private, no-cache, no-store, must-revalidate",
+        "Pragma": "no-cache",
+        "Access-Control-Allow-Origin": "*",
+        "Vary": "Accept-Encoding",
+        "X-FB-Debug": "a8KJVHZscpVuGEARmXw9kmbO+g0p6Ji0KpcoSEd1orf2w8sdnMdD2ldO+cQLldVbf+xYeDTGYCAJ0r3SdLxqqg==",
+        "Date": "Thu, 13 Sep 2018 19:22:08 GMT",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]
