@@ -11,8 +11,7 @@ defmodule DmlWeb.Router do
   end
 
   scope "/auth", DmlWeb do
-    # TODO: Do not merge this! Remove this endpoint when we're ready with the OAuth changes
-    get("/:provider", AuthController, :index)
+    if :prod != Mix.env(), do: get("/:provider", AuthController, :index)
     get("/:provider/callback", AuthController, :callback)
   end
 

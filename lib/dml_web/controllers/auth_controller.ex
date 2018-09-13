@@ -8,7 +8,6 @@ defmodule DmlWeb.AuthController do
 
   action_fallback(DmlWeb.FallbackController)
 
-  # TODO: Do not merge this! Remove this endpoint when we're ready with the OAuth changes
   def index(conn, %{"provider" => provider}) do
     conn |> redirect(external: authorize_url(provider))
   end
