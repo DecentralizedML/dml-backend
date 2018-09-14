@@ -52,3 +52,6 @@ config :dml, Dml.Guardian,
 
 # OAuth2
 config :oauth2, debug: true
+
+# Import secrets
+import_config "dev.secret.exs"

@@ -9,10 +9,14 @@ defmodule DmlWeb.AuthControllerTest do
     Config.cassette_library_dir("test/fixtures/vcr_cassettes")
 
     Config.filter_request_headers("authorization")
-    Config.filter_sensitive_data(System.get_env("GOOGLE_CLIENT_ID"), "<GOOGLE_CLIENT_ID>")
-    Config.filter_sensitive_data(System.get_env("GOOGLE_CLIENT_SECRET"), "<GOOGLE_CLIENT_SECRET>")
-    Config.filter_sensitive_data(System.get_env("FACEBOOK_APP_ID"), "<FACEBOOK_APP_ID>")
-    Config.filter_sensitive_data(System.get_env("FACEBOOK_APP_SECRET"), "<FACEBOOK_APP_SECRET>")
+
+    config = Application.get_env(:dml, Dml.Accounts.GoogleClient)
+    Config.filter_sensitive_data(config[:client_id], "<GOOGLE_CLIENT_ID>")
+    Config.filter_sensitive_data(config[:client_secret], "<GOOGLE_CLIENT_SECRET>")
+
+    config = Application.get_env(:dml, Dml.Accounts.FacebookClient)
+    Config.filter_sensitive_data(config[:client_id], "<FACEBOOK_CLIENT_ID>")
+    Config.filter_sensitive_data(config[:client_secret], "<FACEBOOK_CLIENT_SECRET>")
 
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end

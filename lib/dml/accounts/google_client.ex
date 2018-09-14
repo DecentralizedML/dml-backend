@@ -7,24 +7,22 @@ defmodule Dml.Accounts.GoogleClient do
   @authorization_scope "https://www.googleapis.com/auth/userinfo.email"
   @user_endpoint "https://www.googleapis.com/plus/v1/people/me/openIdConnect"
 
-  defp config do
-    [
-      strategy: __MODULE__,
-      client_id: System.get_env("GOOGLE_CLIENT_ID"),
-      client_secret: System.get_env("GOOGLE_CLIENT_SECRET"),
-      redirect_uri: System.get_env("GOOGLE_REDIRECT_URI"),
-      site: "https://accounts.google.com",
-      authorize_url: "/o/oauth2/auth",
-      token_url: "/o/oauth2/token"
-    ]
-  end
+  @client_defaults [
+    strategy: __MODULE__,
+    site: "https://accounts.google.com",
+    authorize_url: "/o/oauth2/auth",
+    token_url: "/o/oauth2/token"
+  ]
 
   # Public API
 
-  def client(params \\ []) do
-    params
-    |> Keyword.merge(config())
-    |> Client.new()
+  def client(opts \\ []) do
+    opts =
+      @client_defaults
+      |> Keyword.merge(config())
+      |> Keyword.merge(opts)
+
+    Client.new(opts)
   end
 
   def authorize_url!(params \\ [], opts \\ []) do
@@ -62,5 +60,9 @@ defmodule Dml.Accounts.GoogleClient do
       {:error, %OAuth2.Error{reason: reason}} ->
         {:error, reason}
     end
+  end
+
+  defp config do
+    Application.get_env(:dml, Dml.Accounts.GoogleClient)
   end
 end

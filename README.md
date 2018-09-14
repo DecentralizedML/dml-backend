@@ -19,6 +19,13 @@ After cloning the repository, `cd` into it and install the hex dependencies:
 mix deps.get
 ```
 
+Copy the development secrets file:
+
+```bash
+# Edit this file with your Google & Facebook APP credentials
+cp config/dev.secret.exs.sample config/dev.secret.exs
+```
+
 Then create & setup the database:
 
 ```bash

@@ -7,25 +7,23 @@ defmodule Dml.Accounts.FacebookClient do
   @authorization_scope "email"
   @user_fields "id,email,gender,link,locale,name,first_name,last_name,timezone,updated_time,verified"
 
-  defp config do
-    [
-      strategy: __MODULE__,
-      client_id: System.get_env("FACEBOOK_APP_ID"),
-      client_secret: System.get_env("FACEBOOK_APP_SECRET"),
-      redirect_uri: System.get_env("FACEBOOK_REDIRECT_URI"),
-      site: "https://graph.facebook.com",
-      authorize_url: "https://www.facebook.com/v3.1/dialog/oauth",
-      token_url: "/v3.1/oauth/access_token",
-      token_method: :get
-    ]
-  end
+  @client_defaults [
+    strategy: __MODULE__,
+    site: "https://graph.facebook.com",
+    authorize_url: "https://www.facebook.com/v3.1/dialog/oauth",
+    token_url: "/v3.1/oauth/access_token",
+    token_method: :get
+  ]
 
   # Public API
 
-  def client(params \\ []) do
-    params
-    |> Keyword.merge(config())
-    |> Client.new()
+  def client(opts \\ []) do
+    opts =
+      @client_defaults
+      |> Keyword.merge(config())
+      |> Keyword.merge(opts)
+
+    Client.new(opts)
   end
 
   def authorize_url!(params \\ [], opts \\ []) do
@@ -91,5 +89,9 @@ defmodule Dml.Accounts.FacebookClient do
 
   defp hmac(data, type, key) do
     :crypto.hmac(type, key, data)
+  end
+
+  defp config do
+    Application.get_env(:dml, Dml.Accounts.FacebookClient)
   end
 end

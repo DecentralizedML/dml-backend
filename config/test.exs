@@ -25,3 +25,6 @@ config :dml, Dml.Guardian,
 
 # Reduce bcrypt rounds
 config :bcrypt_elixir, :log_rounds, 1
+
+# Import secrets
+import_config "dev.secret.exs"
