@@ -75,12 +75,12 @@ config :dml, Dml.Guardian,
 config :dml, Dml.Accounts.GoogleClient,
   client_id: System.get_env("GOOGLE_CLIENT_ID"),
   client_secret: System.get_env("GOOGLE_CLIENT_SECRET"),
-  redirect_uri: System.get_env("GOOGLE_REDIRECT_URI"),
+  redirect_uri: System.get_env("GOOGLE_REDIRECT_URI")
 
 config :dml, Dml.Accounts.FacebookClient,
   client_id: System.get_env("FACEBOOK_APP_ID"),
   client_secret: System.get_env("FACEBOOK_APP_SECRET"),
-  redirect_uri: System.get_env("FACEBOOK_REDIRECT_URI"),
+  redirect_uri: System.get_env("FACEBOOK_REDIRECT_URI")
 
 # Finally import the config/prod.secret.exs which should be versioned separately.
 # import_config "prod.secret.exs"
