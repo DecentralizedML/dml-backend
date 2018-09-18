@@ -32,6 +32,8 @@ defmodule Dml.Accounts.GoogleClient do
   end
 
   def get_token!(params \\ [], opts \\ []) do
+    params = Keyword.merge(params, client_secret: client().client_secret)
+
     opts
     |> client
     |> Client.get_token!(params)
