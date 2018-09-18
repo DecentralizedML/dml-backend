@@ -3,7 +3,7 @@ defmodule Dml.Marketplace do
 
   import Ecto.Query, warn: false
   alias Dml.Accounts.User
-  alias Dml.Marketplace.{Bounty, BountyStateMachine, Enrollment}
+  alias Dml.Marketplace.{Algorithm, Bounty, BountyStateMachine, Enrollment}
   alias Dml.Repo
 
   def list_bounties do
@@ -46,6 +46,24 @@ defmodule Dml.Marketplace do
       {:ok, item} -> {:ok, Repo.preload(item, [:user, :bounty])}
       {:error, error} -> {:error, error}
     end
+  end
+
+  def list_algorithms do
+    Algorithm |> Repo.all() |> Repo.preload([:user, :enrollment, :bounty])
+  end
+
+  def get_algorithm!(id), do: Algorithm |> Repo.get!(id) |> Repo.preload([:user, :enrollment, :bounty])
+
+  def create_algorithm(user_id, attrs \\ %{}) do
+    %Algorithm{user_id: user_id}
+    |> Algorithm.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def update_algorithm(%Algorithm{} = algorithm, attrs) do
+    algorithm
+    |> Algorithm.changeset(attrs)
+    |> Repo.update()
   end
 
   def authorize(:update_bounty, %User{id: user_id}, %Bounty{owner_id: user_id}), do: true

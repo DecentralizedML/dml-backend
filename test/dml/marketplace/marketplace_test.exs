@@ -94,4 +94,51 @@ defmodule Dml.MarketplaceTest do
       assert "can't be blank" in errors_on(changeset).user_id
     end
   end
+
+  describe "algorithms" do
+    alias Dml.Marketplace.Algorithm
+
+    @valid_attrs params_for(:algorithm)
+    @update_attrs params_for(:algorithm) |> Map.take([:title, :description])
+    @invalid_attrs params_for(:algorithm, title: "")
+
+    test "list_algorithms/0 returns all algorithms" do
+      algorithm = insert(:algorithm)
+      algorithms = Marketplace.list_algorithms()
+
+      assert Enum.count(algorithms) == 1
+      assert has_element_by_id(algorithms, %{id: algorithm.id})
+    end
+
+    test "get_algorithm!/1 returns the algorithm with given id" do
+      algorithm = insert(:algorithm)
+
+      assert Marketplace.get_algorithm!(algorithm.id).id == algorithm.id
+    end
+
+    test "create_algorithm/1 with valid data creates an algorithm" do
+      user = insert(:user)
+      assert {:ok, %Algorithm{} = algorithm} = Marketplace.create_algorithm(user.id, @valid_attrs)
+      assert algorithm.title == @valid_attrs[:title]
+      assert algorithm.description == @valid_attrs[:description]
+      assert algorithm.user_id == user.id
+    end
+
+    test "create_algorithm/1 with invalid data returns error changeset" do
+      user = insert(:user)
+      assert {:error, changeset} = Marketplace.create_algorithm(user, @invalid_attrs)
+      assert "can't be blank" in errors_on(changeset).title
+    end
+
+    test "update_algorithm/2 with valid data (only name) updates the algorithm" do
+      algorithm = insert(:algorithm)
+      assert {:ok, %Algorithm{} = algorithm} = Marketplace.update_algorithm(algorithm, @update_attrs)
+      assert algorithm.title == @update_attrs[:title]
+    end
+
+    test "update_algorithm/2 with invalid data returns error changeset" do
+      algorithm = insert(:algorithm)
+      assert {:error, %Ecto.Changeset{}} = Marketplace.update_algorithm(algorithm, @invalid_attrs)
+    end
+  end
 end

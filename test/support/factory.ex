@@ -31,4 +31,13 @@ defmodule Dml.Factory do
       bounty: build(:bounty)
     }
   end
+
+  def algorithm_factory do
+    %Dml.Marketplace.Algorithm{
+      title: Commerce.product_name(),
+      description: Lorem.paragraph(1),
+      data_required: "photos",
+      user: build(:user)
+    }
+  end
 end
