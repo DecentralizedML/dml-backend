@@ -57,8 +57,7 @@ defmodule DmlWeb.BountyController do
     with bounty <- Marketplace.get_bounty!(bounty_id),
          :ok <- Bodyguard.permit(Marketplace, :enroll, current_user, bounty),
          {:ok, %Enrollment{} = enrollment} <- Marketplace.create_enrollment(current_user.id, bounty.id) do
-      # TODO: Find a way to make the create_enrollment() call preload the user & bounty, so we don't need to fetch it
-      render(conn, "enrollment.json", enrollment: Marketplace.get_enrollment!(enrollment.id))
+      render(conn, "enrollment.json", enrollment: enrollment)
     end
   end
 end

@@ -42,6 +42,10 @@ defmodule Dml.Marketplace do
     %Enrollment{bounty_id: bounty_id, user_id: user_id}
     |> Enrollment.create_changeset()
     |> Repo.insert()
+    |> case do
+      {:ok, item} -> {:ok, Repo.preload(item, [:user, :bounty])}
+      {:error, error} -> {:error, error}
+    end
   end
 
   def authorize(:update_bounty, %User{id: user_id}, %Bounty{owner_id: user_id}), do: true
