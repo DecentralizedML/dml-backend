@@ -43,6 +43,7 @@ defmodule DmlWeb.Endpoint do
     signing_salt: "uTmMbTvV"
   )
 
+  plug(CORSPlug)
   plug(DmlWeb.Router)
 
   @doc """

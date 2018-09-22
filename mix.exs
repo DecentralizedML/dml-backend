@@ -55,6 +55,7 @@ defmodule Dml.Mixfile do
       {:bodyguard, "~> 2.2"},
       {:oauth2, "~> 0.9"},
       {:machinery, "~> 0.16"},
+      {:cors_plug, "~> 1.5"},
       {:credo, "~> 0.10", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.7", only: [:dev, :test], runtime: false},
       {:ex_machina, "~> 2.2", only: :test},

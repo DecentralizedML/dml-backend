@@ -21,6 +21,10 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:user_id]
 
+# CORS
+config :cors_plug,
+  origin: ["http://localhost:3000", "http://localhost:4000", "https://elegant-brisk-indianjackal.gigalixirapp.com"]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
