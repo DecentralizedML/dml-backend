@@ -52,6 +52,10 @@ defmodule Dml.Marketplace do
     Algorithm |> Repo.all() |> Repo.preload([:user, :enrollment, :bounty])
   end
 
+  def list_algorithms_from_user(user) do
+    Algorithm |> where([a], a.user_id == ^user.id) |> Repo.all()
+  end
+
   def get_algorithm!(id), do: Algorithm |> Repo.get!(id) |> Repo.preload([:user, :enrollment, :bounty])
 
   def create_algorithm(user_id, attrs \\ %{}) do
@@ -67,6 +71,7 @@ defmodule Dml.Marketplace do
   end
 
   def authorize(:update, %User{id: user_id}, %Bounty{owner_id: user_id}), do: true
+  def authorize(:update, %User{id: user_id}, %Algorithm{user_id: user_id}), do: true
   def authorize(:enroll, %User{id: user_id}, %Bounty{owner_id: user_id}), do: false
 
   def authorize(:enroll, %User{} = user, %Bounty{state: "open"} = bounty) do
