@@ -66,7 +66,7 @@ defmodule Dml.Marketplace do
     |> Repo.update()
   end
 
-  def authorize(:update_bounty, %User{id: user_id}, %Bounty{owner_id: user_id}), do: true
+  def authorize(:update, %User{id: user_id}, %Bounty{owner_id: user_id}), do: true
   def authorize(:enroll, %User{id: user_id}, %Bounty{owner_id: user_id}), do: false
 
   def authorize(:enroll, %User{} = user, %Bounty{state: "open"} = bounty) do

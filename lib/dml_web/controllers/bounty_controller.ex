@@ -33,7 +33,7 @@ defmodule DmlWeb.BountyController do
 
   def update(conn, %{"id" => id, "bounty" => bounty_params}) do
     with bounty <- Marketplace.get_bounty!(id),
-         :ok <- Bodyguard.permit(Marketplace, :update_bounty, current_user(conn), bounty),
+         :ok <- Bodyguard.permit(Marketplace, :update, current_user(conn), bounty),
          {:ok, %Bounty{} = bounty} <- Marketplace.update_bounty(bounty, bounty_params) do
       render(conn, "show.json", bounty: bounty)
     end
@@ -45,7 +45,7 @@ defmodule DmlWeb.BountyController do
 
   defp update_state(conn, %{"bounty_id" => id, "state" => state}) do
     with bounty <- Marketplace.get_bounty!(id),
-         :ok <- Bodyguard.permit(Marketplace, :update_bounty, current_user(conn), bounty),
+         :ok <- Bodyguard.permit(Marketplace, :update, current_user(conn), bounty),
          {:ok, %Bounty{} = bounty} <- Marketplace.update_bounty_state(bounty, state) do
       render(conn, "show.json", bounty: bounty)
     end
