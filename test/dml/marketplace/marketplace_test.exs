@@ -122,6 +122,8 @@ defmodule Dml.MarketplaceTest do
       assert algorithm.title == @valid_attrs[:title]
       assert algorithm.description == @valid_attrs[:description]
       assert algorithm.user_id == user.id
+      assert algorithm.bounty_id == nil
+      assert algorithm.enrollment_id == nil
     end
 
     test "create_algorithm/1 with invalid data returns error changeset" do
@@ -130,10 +132,24 @@ defmodule Dml.MarketplaceTest do
       assert "can't be blank" in errors_on(changeset).title
     end
 
-    test "update_algorithm/2 with valid data (only name) updates the algorithm" do
+    test "update_algorithm/2 with valid data (only title) updates the algorithm" do
       algorithm = insert(:algorithm)
       assert {:ok, %Algorithm{} = algorithm} = Marketplace.update_algorithm(algorithm, @update_attrs)
       assert algorithm.title == @update_attrs[:title]
+    end
+
+    test "update_algorithm/2 with bounty ID updates the algorithm" do
+      algorithm = insert(:algorithm)
+      bounty = insert(:bounty)
+      user = insert(:user)
+      {:ok, enrollment} = Marketplace.create_enrollment(user.id, bounty.id)
+
+      attrs = %{bounty_id: bounty.id, enrollment_id: enrollment.id}
+
+      assert {:ok, %Algorithm{} = algorithm} = Marketplace.update_algorithm(algorithm, attrs)
+
+      assert algorithm.bounty_id == bounty.id
+      assert algorithm.enrollment_id == enrollment.id
     end
 
     test "update_algorithm/2 with invalid data returns error changeset" do

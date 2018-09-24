@@ -60,13 +60,13 @@ defmodule Dml.Marketplace do
 
   def create_algorithm(user_id, attrs \\ %{}) do
     %Algorithm{user_id: user_id}
-    |> Algorithm.changeset(attrs)
+    |> Algorithm.create_changeset(attrs)
     |> Repo.insert()
   end
 
   def update_algorithm(%Algorithm{} = algorithm, attrs) do
     algorithm
-    |> Algorithm.changeset(attrs)
+    |> Algorithm.update_changeset(attrs)
     |> Repo.update()
   end
 
