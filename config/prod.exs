@@ -72,9 +72,6 @@ config :dml, Dml.Guardian,
 #     config :dml, DmlWeb.Endpoint, server: true
 #
 
-# OAuth2
-config :oauth2, debug: true
-
 config :dml, Dml.Accounts.GoogleClient,
   client_id: System.get_env("GOOGLE_CLIENT_ID"),
   client_secret: System.get_env("GOOGLE_CLIENT_SECRET"),
