@@ -7,7 +7,7 @@ defmodule DmlWeb.AlgorithmController do
   action_fallback(DmlWeb.FallbackController)
 
   def index(conn, _params) do
-    algorithms = Marketplace.list_algorithms()
+    algorithms = Marketplace.list_approved_algorithms()
     render(conn, "index.json", algorithms: algorithms)
   end
 

@@ -10,8 +10,8 @@ defmodule DmlWeb.AlgorithmControllerTest do
 
   describe "index" do
     @tag :authenticated
-    test "lists all published algorithms", %{conn: conn} do
-      algorithm = insert(:algorithm)
+    test "lists all approved algorithms", %{conn: conn} do
+      algorithm = insert(:algorithm, state: "approved")
       conn = get(conn, algorithm_path(conn, :index))
 
       assert json_response(conn, 200) == render_json(AlgorithmView, "index.json", algorithms: [algorithm])

@@ -53,7 +53,11 @@ defmodule Dml.Marketplace do
   end
 
   def list_algorithms_from_user(user) do
-    Algorithm |> where([a], a.user_id == ^user.id) |> Repo.all()
+    Algorithm |> where([a], a.user_id == ^user.id) |> Repo.all() |> Repo.preload([:enrollment, :bounty])
+  end
+
+  def list_approved_algorithms do
+    Algorithm |> where([a], a.state == "approved") |> Repo.all() |> Repo.preload([:user, :enrollment, :bounty])
   end
 
   def get_algorithm!(id), do: Algorithm |> Repo.get!(id) |> Repo.preload([:user, :enrollment, :bounty])
