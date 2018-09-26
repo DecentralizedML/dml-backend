@@ -73,23 +73,23 @@ config :dml, Dml.Guardian,
 #
 
 config :dml, Dml.Accounts.GoogleClient,
-  client_id: {:system, "GOOGLE_CLIENT_ID"},
-  client_secret: {:system, "GOOGLE_CLIENT_SECRET"},
-  redirect_uri: {:system, "GOOGLE_REDIRECT_URI"}
+  client_id: System.get_env("GOOGLE_CLIENT_ID"),
+  client_secret: System.get_env("GOOGLE_CLIENT_SECRET"),
+  redirect_uri: System.get_env("GOOGLE_REDIRECT_URI")
 
 config :dml, Dml.Accounts.FacebookClient,
-  client_id: {:system, "FACEBOOK_APP_ID"},
-  client_secret: {:system, "FACEBOOK_APP_SECRET"},
-  redirect_uri: {:system, "FACEBOOK_REDIRECT_URI"}
+  client_id: System.get_env("FACEBOOK_APP_ID"),
+  client_secret: System.get_env("FACEBOOK_APP_SECRET"),
+  redirect_uri: System.get_env("FACEBOOK_REDIRECT_URI")
 
 # Arc
 config :arc,
   storage: Arc.Storage.S3,
-  bucket: {:system, "S3_BUCKET"}
+  bucket: System.get_env("S3_BUCKET")
 
 # ExAWS
 config :ex_aws,
-  region: {:system, "AWS_REGION"}
+  region: System.get_env("AWS_REGION")
 
 # Finally import the config/prod.secret.exs which should be versioned separately.
 # import_config "prod.secret.exs"
