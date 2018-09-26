@@ -1,7 +1,7 @@
 defmodule DmlWeb.AlgorithmControllerTest do
   use DmlWeb.ConnCase
 
-  alias Dml.Marketplace
+  alias Dml.{Marketplace, Repo}
   alias DmlWeb.AlgorithmView
 
   setup %{conn: conn} do
@@ -109,6 +109,35 @@ defmodule DmlWeb.AlgorithmControllerTest do
       algorithm = insert(:algorithm)
       params = params_for(:algorithm)
       conn = put(conn, algorithm_path(conn, :update, algorithm), algorithm: params)
+      assert json_response(conn, 401)["errors"]["detail"] == "Unauthorized"
+    end
+  end
+
+  describe "download algorithm" do
+    @tag :authenticated
+    test "download the file when the user has acess to it", %{conn: conn, user: user} do
+      algorithm = build(:algorithm, user: user) |> with_file |> Repo.insert!()
+      conn = get(conn, algorithm_download_path(conn, :download, algorithm))
+      assert redirected_to(conn, 302) =~ ~r{/uploads/algorithms/#{user.id}/[A-F0-9]+_original\.txt}
+    end
+
+    @tag :authenticated
+    test "renders errors when trying to download algorithm without file", %{conn: conn, user: user} do
+      algorithm = insert(:algorithm, user: user)
+      conn = get(conn, algorithm_download_path(conn, :download, algorithm))
+      assert json_response(conn, 404)["errors"]["detail"] == "Not Found"
+    end
+
+    @tag :authenticated
+    test "renders errors when trying to download someone's algorithm", %{conn: conn, user: _user} do
+      algorithm = insert(:algorithm)
+      conn = get(conn, algorithm_download_path(conn, :download, algorithm))
+      assert json_response(conn, 401)["errors"]["detail"] == "Unauthorized"
+    end
+
+    test "renders errors when unauthenticated", %{conn: conn} do
+      algorithm = insert(:algorithm)
+      conn = get(conn, algorithm_download_path(conn, :download, algorithm))
       assert json_response(conn, 401)["errors"]["detail"] == "Unauthorized"
     end
   end

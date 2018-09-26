@@ -38,4 +38,14 @@ defmodule DmlWeb.AlgorithmController do
       render(conn, "show.json", algorithm: algorithm)
     end
   end
+
+  def download(conn, %{"algorithm_id" => id}) do
+    with algorithm <- Marketplace.get_algorithm!(id),
+         :ok <- Bodyguard.permit(Marketplace, :download, current_user(conn), algorithm) do
+      case DmlWeb.Algorithm.url({algorithm.file, algorithm}, :original, signed: true) do
+        nil -> conn |> put_status(:not_found) |> render(DmlWeb.ErrorView, "404.json")
+        url -> conn |> redirect(to: url)
+      end
+    end
+  end
 end
