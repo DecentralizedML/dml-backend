@@ -18,6 +18,15 @@ defmodule Dml.MarketplaceTest do
       assert has_element_by_id(bounties, %{id: bounty.id})
     end
 
+    test "list_bounties_from_user/1 returns user bounties" do
+      bounty = insert(:bounty)
+      _other_bounty = insert(:bounty)
+      bounties = Marketplace.list_bounties_from_user(bounty.owner)
+
+      assert Enum.count(bounties) == 1
+      assert has_element_by_id(bounties, %{id: bounty.id})
+    end
+
     test "get_bounty!/1 returns the bounty with given id" do
       bounty = insert(:bounty)
 
@@ -105,6 +114,24 @@ defmodule Dml.MarketplaceTest do
     test "list_algorithms/0 returns all algorithms" do
       algorithm = insert(:algorithm)
       algorithms = Marketplace.list_algorithms()
+
+      assert Enum.count(algorithms) == 1
+      assert has_element_by_id(algorithms, %{id: algorithm.id})
+    end
+
+    test "list_algorithms_from_user/1 returns user algorithms" do
+      algorithm = insert(:algorithm)
+      _other_algorithm = insert(:algorithm)
+      algorithms = Marketplace.list_algorithms_from_user(algorithm.user)
+
+      assert Enum.count(algorithms) == 1
+      assert has_element_by_id(algorithms, %{id: algorithm.id})
+    end
+
+    test "list_approved_algorithms/1 returns only approved algorithms" do
+      algorithm = insert(:algorithm, state: "approved")
+      _other_algorithm = insert(:algorithm)
+      algorithms = Marketplace.list_approved_algorithms()
 
       assert Enum.count(algorithms) == 1
       assert has_element_by_id(algorithms, %{id: algorithm.id})
