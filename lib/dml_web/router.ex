@@ -35,7 +35,9 @@ defmodule DmlWeb.Router do
       post("/enroll", BountyController, :enroll, as: "enroll")
     end
 
-    resources("/algorithms", AlgorithmController, only: [:index, :create, :show, :update])
+    resources("/algorithms", AlgorithmController, only: [:index, :create, :show, :update]) do
+      get("/download", AlgorithmController, :download, as: "download")
+    end
 
     put("/users", UserController, :update)
   end

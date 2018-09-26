@@ -40,4 +40,8 @@ defmodule Dml.Factory do
       user: build(:user)
     }
   end
+
+  def with_file(%Dml.Marketplace.Algorithm{} = algorithm) do
+    %{algorithm | file: %{file_name: "algorithm.txt", updated_at: nil}}
+  end
 end
