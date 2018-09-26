@@ -1,16 +1,18 @@
 defmodule Dml.Marketplace.Algorithm do
   use Ecto.Schema
+  use Arc.Ecto.Schema
   import Ecto.Changeset
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @derive {Phoenix.Param, key: :id}
 
   schema "algorithms" do
-    field(:data_required, :string)
-    field(:description, :string)
-    field(:device_fee, :integer, default: 1)
-    field(:state, :string, default: "pending")
     field(:title, :string)
+    field(:description, :string)
+    field(:data_required, :string)
+    field(:device_fee, :integer, default: 1)
+    field(:file, DmlWeb.Algorithm.Type)
+    field(:state, :string, default: "pending")
 
     timestamps()
 
@@ -30,6 +32,7 @@ defmodule Dml.Marketplace.Algorithm do
   def update_changeset(bounty, attrs) do
     bounty
     |> cast(attrs, [:title, :description, :data_required, :device_fee, :bounty_id, :enrollment_id])
+    |> cast_attachments(attrs, [:file])
     |> validate_title_and_description
     |> validate_device_fee
   end

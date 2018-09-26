@@ -179,6 +179,17 @@ defmodule Dml.MarketplaceTest do
       assert algorithm.enrollment_id == enrollment.id
     end
 
+    test "update_algorithm/2 with attachment, saves the file" do
+      algorithm = insert(:algorithm)
+      file = %Plug.Upload{filename: "algorithm.txt", path: Path.join(File.cwd!(), "test/fixtures/algorithm.txt")}
+
+      assert {:ok, %Algorithm{} = algorithm} = Marketplace.update_algorithm(algorithm, %{file: file})
+      assert %{file_name: "algorithm.txt"} = algorithm.file
+
+      url = DmlWeb.Algorithm.url({algorithm.file, algorithm}, :original)
+      assert Regex.match?(~r{/uploads/algorithms/[a-f\d-]+/[A-F\d]+_original.txt\?v=\d+}, url)
+    end
+
     test "update_algorithm/2 with invalid data returns error changeset" do
       algorithm = insert(:algorithm)
       assert {:error, %Ecto.Changeset{}} = Marketplace.update_algorithm(algorithm, @invalid_attrs)

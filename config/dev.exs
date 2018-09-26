@@ -53,5 +53,9 @@ config :dml, Dml.Guardian,
 # OAuth2
 config :oauth2, debug: true
 
+# Arc
+config :arc,
+  storage: Arc.Storage.Local
+
 # Import secrets
 import_config "dev.secret.exs"

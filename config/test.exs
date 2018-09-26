@@ -26,5 +26,9 @@ config :dml, Dml.Guardian,
 # Reduce bcrypt rounds
 config :bcrypt_elixir, :log_rounds, 1
 
+# Arc
+config :arc,
+  storage: Arc.Storage.Local
+
 # Import secrets
 import_config "dev.secret.exs"

@@ -16,6 +16,7 @@ defmodule DmlWeb.AlgorithmView do
       title: algorithm.title,
       description: algorithm.description,
       device_fee: algorithm.device_fee,
+      # file: DmlWeb.Algorithm.url({algorithm.file, algorithm}, :original, signed: true),
       state: algorithm.state,
       user: UserView.render("user.json", %{user: algorithm.user})
     }
