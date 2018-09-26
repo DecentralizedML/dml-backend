@@ -44,7 +44,7 @@ defmodule DmlWeb.AlgorithmController do
          :ok <- Bodyguard.permit(Marketplace, :download, current_user(conn), algorithm) do
       case DmlWeb.Algorithm.url({algorithm.file, algorithm}, :original, signed: true) do
         nil -> conn |> put_status(:not_found) |> render(DmlWeb.ErrorView, "404.json")
-        url -> conn |> redirect(to: url)
+        url -> conn |> redirect(external: url)
       end
     end
   end
