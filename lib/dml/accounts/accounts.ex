@@ -20,7 +20,7 @@ defmodule Dml.Accounts do
   end
 
   def create_user_from_oauth(attrs \\ %{}) do
-    %User{}
+    %User{new: true}
     |> User.create_from_oauth_changeset(attrs)
     |> Repo.insert()
   end

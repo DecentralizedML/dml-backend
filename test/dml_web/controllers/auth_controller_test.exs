@@ -67,7 +67,7 @@ defmodule DmlWeb.AuthControllerTest do
           get(conn, auth_path(conn, :callback, "google"), params)
         end
 
-      assert %{"jwt" => token, "id" => ^id} = json_response(conn, 201)
+      assert %{"jwt" => token, "id" => ^id} = json_response(conn, 200)
     end
   end
 
@@ -104,7 +104,7 @@ defmodule DmlWeb.AuthControllerTest do
           get(conn, auth_path(conn, :callback, "facebook"), params)
         end
 
-      assert %{"jwt" => token, "id" => ^id} = json_response(conn, 201)
+      assert %{"jwt" => token, "id" => ^id} = json_response(conn, 200)
     end
   end
 end

@@ -31,7 +31,10 @@ defmodule DmlWeb.UserController do
     case Accounts.sign_in_user(email, password) do
       {:ok, token, claims} ->
         {:ok, user} = Guardian.resource_from_claims(claims)
-        conn |> render("jwt.json", user: user, jwt: token)
+
+        conn
+        |> put_status(:ok)
+        |> render("jwt.json", user: user, jwt: token)
 
       _ ->
         {:error, :unauthorized}

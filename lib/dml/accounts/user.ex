@@ -17,6 +17,7 @@ defmodule Dml.Accounts.User do
     field(:wallet_address, :string)
     field(:google_uid, :string)
     field(:facebook_uid, :string)
+    field(:new, :boolean, default: false, virtual: true)
 
     timestamps()
 

@@ -18,7 +18,7 @@ defmodule DmlWeb.AuthController do
          {:ok, %User{} = user} <- Accounts.user_from_oauth(provider, data),
          {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
       conn
-      |> put_status(:created)
+      |> set_response_status(user)
       |> put_resp_header("location", user_path(conn, :show, user))
       |> render(UserView, "jwt.json", user: user, jwt: token)
     end
@@ -35,4 +35,7 @@ defmodule DmlWeb.AuthController do
   defp get_user(token, "google"), do: GoogleClient.get_user(token)
   defp get_user(token, "facebook"), do: FacebookClient.get_user(token)
   defp get_user(_, _), do: raise("No matching provider available")
+
+  defp set_response_status(conn, %User{new: true}), do: conn |> put_status(:created)
+  defp set_response_status(conn, %User{new: _}), do: conn |> put_status(:ok)
 end
