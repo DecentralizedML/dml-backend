@@ -74,9 +74,10 @@ defmodule Dml.MarketplaceTest do
       %{bounty: insert(:bounty)}
     end
 
-    test "list_enrollments/0 returns all enrollments" do
-      enrollment = insert(:enrollment)
-      enrollments = Marketplace.list_enrollments()
+    test "list_enrollments/1 returns all enrollments", %{bounty: bounty} do
+      enrollment = insert(:enrollment, bounty: bounty)
+      _other_enrollment = insert(:enrollment)
+      enrollments = Marketplace.list_enrollments(bounty)
 
       assert Enum.count(enrollments) == 1
       assert has_element_by_id(enrollments, %{id: enrollment.id})
