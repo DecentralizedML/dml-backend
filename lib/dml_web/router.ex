@@ -32,7 +32,7 @@ defmodule DmlWeb.Router do
       put("/open", BountyController, :open, as: "open")
       put("/close", BountyController, :close, as: "close")
       put("/finish", BountyController, :finish, as: "finish")
-      post("/enroll", BountyController, :enroll, as: "enroll")
+      resources("/enrollments", EnrollmentController, only: [:index, :create])
     end
 
     resources("/algorithms", AlgorithmController, only: [:index, :create, :show, :update]) do

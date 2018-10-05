@@ -10,7 +10,7 @@ defmodule Dml.Marketplace do
     Bounty |> Repo.all() |> Repo.preload(:owner)
   end
 
-  def list_bounties_from_user(user) do
+  def list_bounties_from_user(%User{} = user) do
     Bounty |> where([b], b.owner_id == ^user.id) |> Repo.all()
   end
 
@@ -32,8 +32,8 @@ defmodule Dml.Marketplace do
     Machinery.transition_to(bounty, BountyStateMachine, state)
   end
 
-  def list_enrollments do
-    Enrollment |> Repo.all() |> Repo.preload([:user, :bounty])
+  def list_enrollments(%Bounty{} = bounty) do
+    Enrollment |> where([e], e.bounty_id == ^bounty.id) |> Repo.all() |> Repo.preload([:user, :bounty])
   end
 
   def get_enrollment!(id), do: Enrollment |> Repo.get!(id) |> Repo.preload([:user, :bounty])
@@ -52,7 +52,7 @@ defmodule Dml.Marketplace do
     Algorithm |> Repo.all() |> Repo.preload([:user, :enrollment, :bounty])
   end
 
-  def list_algorithms_from_user(user) do
+  def list_algorithms_from_user(%User{} = user) do
     Algorithm |> where([a], a.user_id == ^user.id) |> Repo.all() |> Repo.preload([:enrollment, :bounty])
   end
 
@@ -78,6 +78,7 @@ defmodule Dml.Marketplace do
   def authorize(:update, %User{id: user_id}, %Algorithm{user_id: user_id}), do: true
   def authorize(:download, %User{id: user_id}, %Algorithm{user_id: user_id}), do: true
   def authorize(:enroll, %User{id: user_id}, %Bounty{owner_id: user_id}), do: false
+  def authorize(:list_enrollments, %User{id: user_id}, %Bounty{owner_id: user_id}), do: true
 
   def authorize(:enroll, %User{} = user, %Bounty{state: "open"} = bounty) do
     # NOTE: Enrollment is possible only once
