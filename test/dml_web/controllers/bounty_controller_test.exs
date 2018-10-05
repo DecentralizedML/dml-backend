@@ -43,12 +43,15 @@ defmodule DmlWeb.BountyControllerTest do
   describe "create bounty" do
     @tag :authenticated
     test "renders bounty when data is valid", %{conn: conn, user: user} do
-      params = params_for(:bounty)
+      params = params_for(:bounty, rewards: [3, 2, 1], reward: 6)
       conn = post(conn, bounty_path(conn, :create), bounty: params)
       assert %{"id" => id} = json_response(conn, 201)
 
       bounty = Marketplace.get_bounty!(id)
       assert bounty.owner_id == user.id
+      assert bounty.reward == 6
+      assert bounty.rewards == [3, 2, 1]
+      assert Enum.sum(bounty.rewards) == bounty.reward
     end
 
     @tag :authenticated
