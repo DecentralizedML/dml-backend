@@ -18,6 +18,8 @@ defmodule DmlWeb.BountyView do
       start_date: bounty.start_date,
       end_date: bounty.end_date,
       evaluation_date: bounty.evaluation_date,
+      reward: bounty.reward,
+      rewards: bounty.rewards,
       state: bounty.state,
       owner: UserView.render("user.json", %{user: bounty.owner})
     }
