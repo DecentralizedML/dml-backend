@@ -206,4 +206,58 @@ defmodule DmlWeb.BountyControllerTest do
       assert json_response(conn, 401)["errors"]["detail"] == "Unauthorized"
     end
   end
+
+  describe "reward bounty" do
+    @tag :authenticated
+    test "renders bounty when transition is valid", %{conn: conn, user: user} do
+      %{id: id} = bounty = insert(:bounty, owner: user, state: "closed", rewards: [3, 2], reward: 5)
+
+      enrollment_a = insert(:enrollment, bounty: bounty)
+      enrollment_b = insert(:enrollment, bounty: bounty)
+      enrollment_c = insert(:enrollment, bounty: bounty)
+
+      params = %{winners: [enrollment_b.id, enrollment_a.id]}
+
+      conn = put(conn, bounty_reward_path(conn, :reward, bounty), params)
+      assert %{"id" => ^id} = json_response(conn, 200)
+
+      bounty = Marketplace.get_bounty!(id)
+      assert bounty.state == "finished"
+
+      enrollment = Marketplace.get_enrollment!(enrollment_b.id)
+      assert enrollment.rewarded
+      assert enrollment.rank == 1
+      assert enrollment.reward == 3
+
+      enrollment = Marketplace.get_enrollment!(enrollment_a.id)
+      assert enrollment.rewarded
+      assert enrollment.rank == 2
+      assert enrollment.reward == 2
+
+      enrollment = Marketplace.get_enrollment!(enrollment_c.id)
+      assert enrollment.rewarded == false
+      assert enrollment.rank == nil
+      assert enrollment.reward == nil
+    end
+
+    @tag :authenticated
+    test "renders errors when transition is invalid", %{conn: conn, user: user} do
+      bounty = insert(:bounty, owner: user, state: "open")
+      conn = put(conn, bounty_reward_path(conn, :reward, bounty), winners: [])
+      assert json_response(conn, 401)["errors"]["detail"] == "Unauthorized"
+    end
+
+    @tag :authenticated
+    test "renders errors when trying to update someone's bounty", %{conn: conn, user: _user} do
+      bounty = insert(:bounty)
+      conn = put(conn, bounty_reward_path(conn, :reward, bounty), winners: [])
+      assert json_response(conn, 401)["errors"]["detail"] == "Unauthorized"
+    end
+
+    test "renders errors when unauthenticated", %{conn: conn} do
+      bounty = insert(:bounty)
+      conn = put(conn, bounty_reward_path(conn, :reward, bounty), winners: [])
+      assert json_response(conn, 401)["errors"]["detail"] == "Unauthorized"
+    end
+  end
 end

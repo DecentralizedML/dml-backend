@@ -39,6 +39,14 @@ defmodule DmlWeb.BountyController do
     end
   end
 
+  def reward(conn, %{"bounty_id" => id, "winners" => winners}) do
+    with bounty <- Marketplace.get_bounty!(id),
+         :ok <- Bodyguard.permit(Marketplace, :reward, current_user(conn), bounty),
+         {:ok, %{reward: %Bounty{} = bounty}} <- Marketplace.reward_bounty(bounty, winners) do
+      render(conn, "show.json", bounty: bounty)
+    end
+  end
+
   def open(conn, %{"bounty_id" => id}), do: update_state(conn, %{"bounty_id" => id, "state" => "open"})
   def close(conn, %{"bounty_id" => id}), do: update_state(conn, %{"bounty_id" => id, "state" => "closed"})
   def finish(conn, %{"bounty_id" => id}), do: update_state(conn, %{"bounty_id" => id, "state" => "finished"})

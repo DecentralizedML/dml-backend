@@ -24,4 +24,12 @@ defmodule Dml.Marketplace.Enrollment do
     |> cast(attrs, [])
     |> validate_required([:user_id, :bounty_id])
   end
+
+  def reward_changeset(enrollment, attrs \\ %{}) do
+    enrollment
+    |> cast(attrs, [:rewarded, :reward, :rank])
+    |> validate_required([:rewarded, :reward, :rank])
+    |> validate_number(:reward, greater_than_or_equal_to: 1)
+    |> validate_number(:rank, greater_than_or_equal_to: 1)
+  end
 end
