@@ -5,6 +5,7 @@ defmodule Dml.Marketplace do
   alias Dml.Accounts.User
   alias Dml.Marketplace.{Algorithm, Bounty, BountyStateMachine, Enrollment}
   alias Dml.Repo
+  alias Ecto.Multi
 
   def list_bounties do
     Bounty |> Repo.all() |> Repo.preload(:owner)
@@ -30,6 +31,26 @@ defmodule Dml.Marketplace do
 
   def update_bounty_state(%Bounty{} = bounty, state) do
     Machinery.transition_to(bounty, BountyStateMachine, state)
+  end
+
+  def reward_bounty(%Bounty{} = bounty, winners) do
+    multi =
+      winners
+      |> Stream.with_index()
+      |> Stream.map(fn {enrollment_id, rank} ->
+        reward = Enum.at(bounty.rewards, rank)
+        changeset = reward_enrollment_changeset(enrollment_id, rank, reward)
+        Multi.update(Multi.new(), "reward_#{rank}", changeset)
+      end)
+      |> Enum.reduce(Multi.new(), &Multi.append/2)
+      |> Multi.update(:reward, Bounty.update_state_changeset(bounty, %{state: "finished"}))
+
+    Repo.transaction(multi)
+  end
+
+  defp reward_enrollment_changeset(enrollment_id, rank, reward) do
+    %Enrollment{id: enrollment_id}
+    |> Enrollment.reward_changeset(%{rewarded: true, rank: rank + 1, reward: reward})
   end
 
   def list_enrollments(%Bounty{} = bounty) do
@@ -75,6 +96,7 @@ defmodule Dml.Marketplace do
   end
 
   def authorize(:update, %User{id: user_id}, %Bounty{owner_id: user_id}), do: true
+  def authorize(:reward, %User{id: user_id}, %Bounty{owner_id: user_id, state: "closed"}), do: true
   def authorize(:update, %User{id: user_id}, %Algorithm{user_id: user_id}), do: true
   def authorize(:download, %User{id: user_id}, %Algorithm{user_id: user_id}), do: true
   def authorize(:enroll, %User{id: user_id}, %Bounty{owner_id: user_id}), do: false
