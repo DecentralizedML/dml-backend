@@ -23,7 +23,12 @@ config :logger, :console,
 
 # CORS
 config :cors_plug,
-  origin: ["http://localhost:3000", "http://localhost:4000", "https://elegant-brisk-indianjackal.gigalixirapp.com"]
+  origin: [
+    "http://localhost:3000",
+    "http://localhost:4000",
+    "https://elegant-brisk-indianjackal.gigalixirapp.com",
+    "https://clever-davinci-c72572.netlify.com"
+  ]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
