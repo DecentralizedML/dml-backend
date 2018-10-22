@@ -39,6 +39,19 @@ defmodule DmlWeb.UserControllerTest do
     end
   end
 
+  describe "me user" do
+    @tag :authenticated
+    test "renders user when data is valid", %{conn: conn, user: user} do
+      conn = get(conn, user_path(conn, :me))
+      assert json_response(conn, 200) == render_json(UserView, "show.json", user: user)
+    end
+
+    test "renders errors when user is not authenticated", %{conn: conn} do
+      conn = get(conn, user_path(conn, :me))
+      assert json_response(conn, 401)["errors"]["detail"] == "Unauthorized"
+    end
+  end
+
   describe "authenticate user" do
     test "renders JWT when data is valid", %{conn: conn} do
       params = params_for(:user)

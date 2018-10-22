@@ -27,6 +27,11 @@ defmodule DmlWeb.UserController do
     render(conn, "show.json", user: user)
   end
 
+  def me(conn, _params) do
+    user = current_user(conn)
+    render(conn, "show.json", user: user)
+  end
+
   def authenticate(conn, %{"email" => email, "password" => password}) do
     case Accounts.sign_in_user(email, password) do
       {:ok, token, claims} ->

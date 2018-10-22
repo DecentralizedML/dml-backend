@@ -41,5 +41,6 @@ defmodule DmlWeb.Router do
     end
 
     put("/users", UserController, :update)
+    get("/me", UserController, :me)
   end
 end
