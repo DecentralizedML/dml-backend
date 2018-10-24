@@ -18,7 +18,7 @@ defmodule DmlWeb.Router do
   scope "/api", DmlWeb do
     pipe_through(:api)
 
-    resources("/users", UserController, only: [:index, :create, :show])
+    resources("/users", UserController, only: [:index, :create])
     post("/users/authenticate", UserController, :authenticate)
   end
 
@@ -40,7 +40,7 @@ defmodule DmlWeb.Router do
       get("/download", AlgorithmController, :download, as: "download")
     end
 
+    resources("/users", UserController, only: [:show])
     put("/users", UserController, :update)
-    get("/me", UserController, :me)
   end
 end

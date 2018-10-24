@@ -28,8 +28,12 @@ defmodule DmlWeb.UserControllerTest do
       {:ok, claims} = Guardian.decode_and_verify(token)
       {:ok, user} = Guardian.resource_from_claims(claims)
 
-      conn = get(conn, user_path(conn, :show, user.id))
-      assert json_response(conn, 200) == render_json(UserView, "show.json", user: user)
+      # Sign-in the user & check the user data
+      conn
+      |> Plug.sign_in(user)
+      |> get(user_path(conn, :show, user.id))
+
+      assert json_response(conn, 201) == render_json(UserView, "jwt.json", user: user, jwt: token)
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -42,12 +46,12 @@ defmodule DmlWeb.UserControllerTest do
   describe "me user" do
     @tag :authenticated
     test "renders user when data is valid", %{conn: conn, user: user} do
-      conn = get(conn, user_path(conn, :me))
+      conn = get(conn, user_path(conn, :show, "me"))
       assert json_response(conn, 200) == render_json(UserView, "show.json", user: user)
     end
 
     test "renders errors when user is not authenticated", %{conn: conn} do
-      conn = get(conn, user_path(conn, :me))
+      conn = get(conn, user_path(conn, :show, "me"))
       assert json_response(conn, 401)["errors"]["detail"] == "Unauthorized"
     end
   end
@@ -84,7 +88,11 @@ defmodule DmlWeb.UserControllerTest do
       assert %{"id" => ^id} = json_response(conn, 200)
 
       user = Accounts.get_user!(id)
-      conn = get(conn, user_path(conn, :show, id))
+
+      conn
+      |> Plug.sign_in(user)
+      |> get(user_path(conn, :show, user.id))
+
       assert json_response(conn, 200) == render_json(UserView, "show.json", user: user)
       assert json_response(conn, 200)["first_name"] == params[:first_name]
     end

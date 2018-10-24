@@ -17,18 +17,17 @@ defmodule DmlWeb.UserController do
          {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", user_path(conn, :show, user))
       |> render("jwt.json", user: user, jwt: token)
     end
   end
 
   def show(conn, %{"id" => id}) do
-    user = Accounts.get_user!(id)
-    render(conn, "show.json", user: user)
-  end
+    user =
+      case id do
+        "me" -> current_user(conn)
+        id -> Accounts.get_user!(id)
+      end
 
-  def me(conn, _params) do
-    user = current_user(conn)
     render(conn, "show.json", user: user)
   end
 
