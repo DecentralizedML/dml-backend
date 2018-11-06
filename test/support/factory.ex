@@ -14,6 +14,10 @@ defmodule Dml.Factory do
     }
   end
 
+  def with_profile_image(%Dml.Accounts.User{} = user) do
+    %{user | profile_image: %{file_name: "user.jpg", updated_at: nil}}
+  end
+
   def bounty_factory do
     %Dml.Marketplace.Bounty{
       name: Commerce.product_name(),

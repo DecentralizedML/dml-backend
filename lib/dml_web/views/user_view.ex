@@ -1,5 +1,7 @@
 defmodule DmlWeb.UserView do
   use DmlWeb, :view
+  alias Dml.Accounts.User
+  alias DmlWeb.ProfileImageUploader
   alias DmlWeb.UserView
 
   def render("index.json", %{users: users}) do
@@ -23,7 +25,14 @@ defmodule DmlWeb.UserView do
       email: user.email,
       first_name: user.first_name,
       last_name: user.last_name,
+      profile_image: profile_image(user),
       wallet_address: user.wallet_address
     }
+  end
+
+  def profile_image(%User{profile_image: nil, profile_image_url: image}), do: image
+
+  def profile_image(%User{profile_image: image} = user) do
+    ProfileImageUploader.url({image, user}, :original)
   end
 end
