@@ -6,7 +6,7 @@ defmodule DmlWeb.ProfileImageUploader do
   @acl :public_read
 
   # To add a thumbnail version:
-  # @versions [:original, :thumb]
+  @versions [:original, :thumb]
 
   # Override the bucket on a per definition basis:
   # def bucket do
@@ -14,14 +14,14 @@ defmodule DmlWeb.ProfileImageUploader do
   # end
 
   # Whitelist file extensions:
-  # def validate({file, _}) do
-  #   ~w(.jpg .jpeg .gif .png) |> Enum.member?(Path.extname(file.file_name))
-  # end
+  def validate({file, _}) do
+    ~w(.jpg .jpeg .gif .png) |> Enum.member?(Path.extname(file.file_name))
+  end
 
   # Define a thumbnail transformation:
-  # def transform(:thumb, _) do
-  #   {:convert, "-strip -thumbnail 250x250^ -gravity center -extent 250x250 -format png", :png}
-  # end
+  def transform(:thumb, _) do
+    {:convert, "-strip -thumbnail 250x250^ -gravity center -extent 250x250 -format jpg", :jpg}
+  end
 
   # Override the persisted filenames:
   def filename(version, {file, scope}) do

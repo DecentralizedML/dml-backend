@@ -33,6 +33,6 @@ defmodule DmlWeb.UserView do
   def profile_image(%User{profile_image: nil, profile_image_url: image}), do: image
 
   def profile_image(%User{profile_image: image} = user) do
-    ProfileImageUploader.url({image, user}, :original)
+    ProfileImageUploader.url({image, user}, :thumb)
   end
 end

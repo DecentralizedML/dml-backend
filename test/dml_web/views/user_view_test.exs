@@ -1,7 +1,7 @@
 defmodule DmlWeb.UserViewTest do
   use DmlWeb.ConnCase, async: true
-  alias DmlWeb.UserView
   alias Dml.Repo
+  alias DmlWeb.UserView
 
   defp user_json(user) do
     UserView.render("user.json", %{user: user})
@@ -46,7 +46,7 @@ defmodule DmlWeb.UserViewTest do
   describe "profile_image/1" do
     test "user with uploaded image" do
       user = build(:user, profile_image_url: "hello.jpg") |> with_profile_image |> Repo.insert!()
-      assert UserView.profile_image(user) =~ ~r{/uploads/profile_images/[A-F0-9]+_original\.jpg}
+      assert UserView.profile_image(user) =~ ~r{/uploads/profile_images/[A-F0-9]+_thumb\.jpg}
     end
 
     test "user with image URL" do
