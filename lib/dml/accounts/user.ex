@@ -1,5 +1,6 @@
 defmodule Dml.Accounts.User do
   use Ecto.Schema
+  use Arc.Ecto.Schema
   import Ecto.Changeset
   import Comeonin.Bcrypt, only: [hashpwsalt: 1]
 
@@ -17,6 +18,8 @@ defmodule Dml.Accounts.User do
     field(:wallet_address, :string)
     field(:google_uid, :string)
     field(:facebook_uid, :string)
+    field(:profile_image, DmlWeb.ProfileImageUploader.Type)
+    field(:profile_image_url, :string)
     field(:new, :boolean, default: false, virtual: true)
 
     timestamps()
@@ -41,6 +44,7 @@ defmodule Dml.Accounts.User do
   def update_changeset(user, attrs) do
     user
     |> cast(attrs, [:first_name, :last_name])
+    |> cast_attachments(attrs, [:profile_image])
     |> validate_first_and_last_name
   end
 
