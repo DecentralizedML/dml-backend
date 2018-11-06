@@ -11,6 +11,7 @@ defmodule DmlWeb.AlgorithmViewTest do
              title: algorithm.title,
              description: algorithm.description,
              device_fee: algorithm.device_fee,
+             downloads: AlgorithmView.downloads(algorithm),
              state: algorithm.state,
              user: UserView.render("user.json", %{user: algorithm.user})
            }
@@ -28,6 +29,23 @@ defmodule DmlWeb.AlgorithmViewTest do
     rendered_algorithm = AlgorithmView.render("show.json", %{algorithm: algorithm})
 
     assert rendered_algorithm == algorithm_json(algorithm)
+  end
+
+  describe "downloads/1" do
+    test "with less than 1k downloads" do
+      algorithm = build(:algorithm, downloads: 751)
+      assert AlgorithmView.downloads(algorithm) == "751"
+    end
+
+    test "with more than 1k downloads" do
+      algorithm = build(:algorithm, downloads: 3421)
+      assert AlgorithmView.downloads(algorithm) == "3.4k"
+    end
+
+    test "with more than 1m downloads" do
+      algorithm = build(:algorithm, downloads: 3_321_421)
+      assert AlgorithmView.downloads(algorithm) == "3.3m"
+    end
   end
 
   defp algorithm_json(algorithm) do

@@ -11,6 +11,7 @@ defmodule Dml.Marketplace.Algorithm do
     field(:description, :string)
     field(:data_required, :string)
     field(:device_fee, :integer, default: 1)
+    field(:downloads, :integer, default: 1)
     field(:file, DmlWeb.Algorithm.Type)
     field(:state, :string, default: "pending")
 
