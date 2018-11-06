@@ -31,17 +31,43 @@ defmodule Dml.Accounts do
     |> Repo.update()
   end
 
-  def user_from_oauth("google", %{"sub" => id, "email" => email, "given_name" => first_name, "family_name" => last_name}) do
+  def user_from_oauth("google", %{
+        "sub" => id,
+        "email" => email,
+        "given_name" => name,
+        "family_name" => surname,
+        "picture" => picture
+      }) do
     case Repo.get_by(User, email: email, google_uid: id) do
-      nil -> create_user_from_oauth(%{email: email, google_uid: id, first_name: first_name, last_name: last_name})
-      user -> {:ok, user}
+      nil ->
+        create_user_from_oauth(%{
+          email: email,
+          google_uid: id,
+          first_name: name,
+          last_name: surname,
+          profile_image_url: picture
+        })
+
+      user ->
+        {:ok, user}
     end
   end
 
-  def user_from_oauth("facebook", %{"id" => id, "email" => email, "first_name" => first_name, "last_name" => last_name}) do
+  def user_from_oauth("facebook", %{"id" => id, "email" => email, "first_name" => name, "last_name" => surname}) do
     case Repo.get_by(User, email: email, facebook_uid: id) do
-      nil -> create_user_from_oauth(%{email: email, facebook_uid: id, first_name: first_name, last_name: last_name})
-      user -> {:ok, user}
+      nil ->
+        picture = "https://graph.facebook.com/v3.2/#{id}/picture?type=normal"
+
+        create_user_from_oauth(%{
+          email: email,
+          facebook_uid: id,
+          first_name: name,
+          last_name: surname,
+          profile_image_url: picture
+        })
+
+      user ->
+        {:ok, user}
     end
   end
 
