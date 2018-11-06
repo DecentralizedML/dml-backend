@@ -52,6 +52,7 @@ defmodule DmlWeb.AuthControllerTest do
       assert user.first_name == "Thiago"
       assert user.last_name == "Belem"
       assert user.google_uid == @google_auth_params["id"]
+      assert user.profile_image_url =~ ~r{https:\/\/lh3.googleusercontent.com\/.*\/photo.jpg\?sz=50}
     end
   end
 
@@ -89,6 +90,7 @@ defmodule DmlWeb.AuthControllerTest do
       assert user.first_name == "Thiago"
       assert user.last_name == "Belem"
       assert user.facebook_uid == @facebook_auth_params["id"]
+      assert user.profile_image_url == "https://graph.facebook.com/v3.2/#{user.facebook_uid}/picture?type=normal"
     end
   end
 
