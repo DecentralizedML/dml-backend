@@ -30,7 +30,7 @@ defmodule Dml.Mixfile do
   def application do
     [
       mod: {Dml.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :edeliver]
     ]
   end
 
@@ -66,7 +66,11 @@ defmodule Dml.Mixfile do
       {:ex_machina, "~> 2.2", only: :test},
       {:excoveralls, "~> 0.10", only: :test},
       {:faker, "~> 0.10", only: :test},
-      {:exvcr, "~> 0.10", only: :test}
+      {:exvcr, "~> 0.10", only: :test},
+
+      # Deploy
+      {:edeliver, ">= 1.6.0"},
+      {:distillery, "~> 2.0", warn_missing: false}
     ]
   end
 

@@ -15,10 +15,12 @@ use Mix.Config
 # which you typically run after static files are built.
 config :dml, DmlWeb.Endpoint,
   load_from_system_env: true,
-  # url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json",
+  http: [port: {:system, "PORT"}],
+  url: [host: "dml-api.dev.kyokan.io", port: 80],
+  # cache_static_manifest: "priv/static/cache_manifest.json",
   secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE"),
-  server: true
+  server: true,
+  code_reloader: false
 
 config :dml, Dml.Repo,
   adapter: Ecto.Adapters.Postgres,
