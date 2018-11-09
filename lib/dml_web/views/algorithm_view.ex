@@ -1,5 +1,5 @@
 defmodule DmlWeb.AlgorithmView do
-  use JSONAPI.View, type: "algorithms"
+  use JSONAPI.View, type: "algorithms", namespace: "/api"
 
   def fields do
     [:title, :description, :device_fee, :state]

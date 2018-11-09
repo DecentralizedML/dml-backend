@@ -1,5 +1,5 @@
 defmodule DmlWeb.EnrollmentView do
-  use JSONAPI.View, type: "enrollments"
+  use JSONAPI.View, type: "enrollments", namespace: "/api"
 
   def fields do
     [:state, :rewarded, :reward, :rank]

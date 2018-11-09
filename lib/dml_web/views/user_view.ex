@@ -1,5 +1,5 @@
 defmodule DmlWeb.UserView do
-  use JSONAPI.View, type: "users"
+  use JSONAPI.View, type: "users", namespace: "/api"
 
   alias Dml.Accounts.User
   alias DmlWeb.ProfileImageUploader

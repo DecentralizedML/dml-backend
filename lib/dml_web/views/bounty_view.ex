@@ -1,5 +1,5 @@
 defmodule DmlWeb.BountyView do
-  use JSONAPI.View, type: "bounties"
+  use JSONAPI.View, type: "bounties", namespace: "/api"
 
   def fields do
     [:name, :description, :start_date, :end_date, :evaluation_date, :reward, :rewards, :state]

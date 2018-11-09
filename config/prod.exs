@@ -38,6 +38,11 @@ config :dml, Dml.Guardian,
   issuer: "DML",
   secret_key: Map.fetch!(System.get_env(), "SECRET_KEY_BASE")
 
+# JSONAPI
+config :jsonapi,
+  host: "dml-api.dev.kyokan.io",
+  scheme: "https"
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
