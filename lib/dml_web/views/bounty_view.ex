@@ -1,27 +1,11 @@
 defmodule DmlWeb.BountyView do
-  use DmlWeb, :view
-  alias DmlWeb.{BountyView, UserView}
+  use JSONAPI.View, type: "bounties"
 
-  def render("index.json", %{bounties: bounties}) do
-    render_many(bounties, BountyView, "bounty.json")
+  def fields do
+    [:name, :description, :start_date, :end_date, :evaluation_date, :reward, :rewards, :state]
   end
 
-  def render("show.json", %{bounty: bounty}) do
-    render_one(bounty, BountyView, "bounty.json")
-  end
-
-  def render("bounty.json", %{bounty: bounty}) do
-    %{
-      id: bounty.id,
-      name: bounty.name,
-      description: bounty.description,
-      start_date: bounty.start_date,
-      end_date: bounty.end_date,
-      evaluation_date: bounty.evaluation_date,
-      reward: bounty.reward,
-      rewards: bounty.rewards,
-      state: bounty.state,
-      owner: UserView.render("user.json", %{user: bounty.owner})
-    }
+  def relationships do
+    [owner: {DmlWeb.UserView, :include}]
   end
 end

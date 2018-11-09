@@ -8,12 +8,12 @@ defmodule DmlWeb.BountyController do
 
   def index(conn, _params) do
     bounties = Marketplace.list_bounties()
-    render(conn, "index.json", bounties: bounties)
+    render(conn, "index.json", data: bounties)
   end
 
   def mine(conn, _params) do
     bounties = Marketplace.list_bounties_from_user(current_user(conn))
-    render(conn, "index.json", bounties: bounties)
+    render(conn, "index.json", data: bounties)
   end
 
   def create(conn, %{"bounty" => bounty_params}) do
@@ -22,20 +22,20 @@ defmodule DmlWeb.BountyController do
       conn
       |> put_status(:created)
       |> put_resp_header("location", bounty_path(conn, :show, bounty))
-      |> render("show.json", bounty: bounty)
+      |> render("show.json", data: bounty)
     end
   end
 
   def show(conn, %{"id" => id}) do
     bounty = Marketplace.get_bounty!(id)
-    render(conn, "show.json", bounty: bounty)
+    render(conn, "show.json", data: bounty)
   end
 
   def update(conn, %{"id" => id, "bounty" => bounty_params}) do
     with bounty <- Marketplace.get_bounty!(id),
          :ok <- Bodyguard.permit(Marketplace, :update, current_user(conn), bounty),
          {:ok, %Bounty{} = bounty} <- Marketplace.update_bounty(bounty, bounty_params) do
-      render(conn, "show.json", bounty: bounty)
+      render(conn, "show.json", data: bounty)
     end
   end
 
@@ -43,7 +43,7 @@ defmodule DmlWeb.BountyController do
     with bounty <- Marketplace.get_bounty!(id),
          :ok <- Bodyguard.permit(Marketplace, :reward, current_user(conn), bounty),
          {:ok, %{reward: %Bounty{} = bounty}} <- Marketplace.reward_bounty(bounty, winners) do
-      render(conn, "show.json", bounty: bounty)
+      render(conn, "show.json", data: bounty)
     end
   end
 
@@ -55,7 +55,7 @@ defmodule DmlWeb.BountyController do
     with bounty <- Marketplace.get_bounty!(id),
          :ok <- Bodyguard.permit(Marketplace, :update, current_user(conn), bounty),
          {:ok, %Bounty{} = bounty} <- Marketplace.update_bounty_state(bounty, state) do
-      render(conn, "show.json", bounty: bounty)
+      render(conn, "show.json", data: bounty)
     end
   end
 end
