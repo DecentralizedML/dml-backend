@@ -20,7 +20,7 @@ defmodule DmlWeb.AuthController do
       conn
       |> set_response_status(user)
       |> put_resp_header("location", user_path(conn, :show, user))
-      |> render(UserView, "jwt.json", user: user, jwt: token)
+      |> render(UserView, "show.json", data: user, meta: %{jwt: token})
     end
   end
 

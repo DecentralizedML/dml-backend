@@ -9,7 +9,7 @@ defmodule DmlWeb.UserController do
 
   def index(conn, _params) do
     users = Accounts.list_users()
-    render(conn, "index.json", users: users)
+    render(conn, "index.json", data: users)
   end
 
   def create(conn, %{"user" => user_params}) do
@@ -17,7 +17,7 @@ defmodule DmlWeb.UserController do
          {:ok, token, _claims} <- Guardian.encode_and_sign(user) do
       conn
       |> put_status(:created)
-      |> render("jwt.json", user: user, jwt: token)
+      |> render("show.json", data: user, meta: %{jwt: token})
     end
   end
 
@@ -28,7 +28,7 @@ defmodule DmlWeb.UserController do
         id -> Accounts.get_user!(id)
       end
 
-    render(conn, "show.json", user: user)
+    render(conn, "show.json", data: user)
   end
 
   def authenticate(conn, %{"email" => email, "password" => password}) do
@@ -38,7 +38,7 @@ defmodule DmlWeb.UserController do
 
         conn
         |> put_status(:ok)
-        |> render("jwt.json", user: user, jwt: token)
+        |> render("show.json", data: user, meta: %{jwt: token})
 
       _ ->
         {:error, :unauthorized}
@@ -49,7 +49,7 @@ defmodule DmlWeb.UserController do
     with user <- current_user(conn),
          :ok <- Bodyguard.permit(Accounts, :update_user, user, user),
          {:ok, %User{} = user} <- Accounts.update_user(user, user_params) do
-      render(conn, "show.json", user: user)
+      render(conn, "show.json", data: user)
     end
   end
 end
