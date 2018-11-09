@@ -1,23 +1,11 @@
 defmodule DmlWeb.EnrollmentView do
-  use DmlWeb, :view
-  alias DmlWeb.{EnrollmentView, UserView}
+  use JSONAPI.View, type: "enrollments"
 
-  def render("index.json", %{enrollments: enrollments}) do
-    render_many(enrollments, EnrollmentView, "enrollment.json")
+  def fields do
+    [:state, :rewarded, :reward, :rank]
   end
 
-  def render("show.json", %{enrollment: enrollment}) do
-    render_one(enrollment, EnrollmentView, "enrollment.json")
-  end
-
-  def render("enrollment.json", %{enrollment: enrollment}) do
-    %{
-      id: enrollment.id,
-      user: UserView.render("user.json", %{user: enrollment.user}),
-      state: enrollment.state,
-      rewarded: enrollment.rewarded,
-      reward: enrollment.reward,
-      rank: enrollment.rank
-    }
+  def relationships do
+    [user: {DmlWeb.UserView, :include}]
   end
 end

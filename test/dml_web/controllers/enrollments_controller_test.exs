@@ -16,7 +16,7 @@ defmodule DmlWeb.EnrollmentControllerTest do
       _other_enrollment = insert(:enrollment)
       conn = get(conn, bounty_enrollment_path(conn, :index, bounty))
 
-      assert json_response(conn, 200) == render_json(EnrollmentView, "index.json", enrollments: [enrollment])
+      assert json_response(conn, 200) == render_json(EnrollmentView, "index.json", %{data: [enrollment], conn: conn})
     end
 
     @tag :authenticated
@@ -39,7 +39,7 @@ defmodule DmlWeb.EnrollmentControllerTest do
       bounty = insert(:bounty, state: "open")
 
       conn = post(conn, bounty_enrollment_path(conn, :create, bounty))
-      assert %{"id" => id} = json_response(conn, 200)
+      assert %{"data" => %{"id" => id}} = json_response(conn, 200)
 
       enrollment = Marketplace.get_enrollment!(id)
       assert enrollment.user_id == user.id
