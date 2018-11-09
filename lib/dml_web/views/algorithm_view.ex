@@ -1,24 +1,11 @@
 defmodule DmlWeb.AlgorithmView do
-  use DmlWeb, :view
-  alias DmlWeb.{AlgorithmView, UserView}
+  use JSONAPI.View, type: "algorithms"
 
-  def render("index.json", %{algorithms: algorithms}) do
-    render_many(algorithms, AlgorithmView, "algorithm.json")
+  def fields do
+    [:title, :description, :device_fee, :state]
   end
 
-  def render("show.json", %{algorithm: algorithm}) do
-    render_one(algorithm, AlgorithmView, "algorithm.json")
-  end
-
-  def render("algorithm.json", %{algorithm: algorithm}) do
-    %{
-      id: algorithm.id,
-      title: algorithm.title,
-      description: algorithm.description,
-      device_fee: algorithm.device_fee,
-      # file: DmlWeb.Algorithm.url({algorithm.file, algorithm}, :original, signed: true),
-      state: algorithm.state,
-      user: UserView.render("user.json", %{user: algorithm.user})
-    }
+  def relationships do
+    [user: {DmlWeb.UserView, :include}]
   end
 end

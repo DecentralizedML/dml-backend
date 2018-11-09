@@ -14,7 +14,7 @@ defmodule DmlWeb.AlgorithmControllerTest do
       algorithm = insert(:algorithm, state: "approved")
       conn = get(conn, algorithm_path(conn, :index))
 
-      assert json_response(conn, 200) == render_json(AlgorithmView, "index.json", algorithms: [algorithm])
+      assert json_response(conn, 200) == render_json(AlgorithmView, "index.json", %{data: [algorithm], conn: conn})
     end
 
     test "renders errors when unauthenticated", %{conn: conn} do
@@ -30,7 +30,7 @@ defmodule DmlWeb.AlgorithmControllerTest do
       _other_algorithm = insert(:algorithm)
 
       conn = get(conn, algorithm_path(conn, :mine))
-      rendered = render_json(AlgorithmView, "index.json", algorithms: [%{my_algorithm | user: nil}])
+      rendered = render_json(AlgorithmView, "index.json", %{data: [%{my_algorithm | user: nil}], conn: conn})
 
       assert json_response(conn, 200) == rendered
     end
@@ -46,7 +46,7 @@ defmodule DmlWeb.AlgorithmControllerTest do
     test "renders algorithm when data is valid", %{conn: conn, user: user} do
       params = params_for(:algorithm)
       conn = post(conn, algorithm_path(conn, :create), algorithm: params)
-      assert %{"id" => id} = json_response(conn, 201)
+      assert %{"data" => %{"id" => id}} = json_response(conn, 201)
 
       algorithm = Marketplace.get_algorithm!(id)
       assert algorithm.user_id == user.id
@@ -72,7 +72,7 @@ defmodule DmlWeb.AlgorithmControllerTest do
       algorithm = insert(:algorithm)
 
       conn = get(conn, algorithm_path(conn, :show, algorithm.id))
-      assert json_response(conn, 200) == render_json(AlgorithmView, "show.json", algorithm: algorithm)
+      assert json_response(conn, 200) == render_json(AlgorithmView, "show.json", %{data: algorithm, conn: conn})
     end
   end
 
@@ -83,7 +83,7 @@ defmodule DmlWeb.AlgorithmControllerTest do
 
       params = params_for(:algorithm) |> Map.take([:title, :description])
       conn = put(conn, algorithm_path(conn, :update, algorithm), algorithm: params)
-      assert %{"id" => ^id} = json_response(conn, 200)
+      assert %{"data" => %{"id" => ^id}} = json_response(conn, 200)
 
       algorithm = Marketplace.get_algorithm!(id)
       assert algorithm.title == params[:title]
