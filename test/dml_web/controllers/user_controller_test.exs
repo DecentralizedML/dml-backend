@@ -15,7 +15,7 @@ defmodule DmlWeb.UserControllerTest do
       user = insert(:user)
       conn = get(conn, user_path(conn, :index))
 
-      assert json_response(conn, 200) == render_json(UserView, "index.json", users: [user])
+      assert json_response(conn, 200) == render_json(UserView, "index.json", %{data: [user], conn: conn})
     end
   end
 
@@ -23,7 +23,7 @@ defmodule DmlWeb.UserControllerTest do
     test "renders JWT when data is valid", %{conn: conn} do
       params = params_for(:user) |> Map.take([:email, :password, :password_confirmation])
       conn = post(conn, user_path(conn, :create), user: params)
-      assert %{"jwt" => token} = json_response(conn, 201)
+      assert %{"meta" => %{"jwt" => token}} = json_response(conn, 201)
 
       {:ok, claims} = Guardian.decode_and_verify(token)
       {:ok, user} = Guardian.resource_from_claims(claims)
@@ -33,7 +33,8 @@ defmodule DmlWeb.UserControllerTest do
       |> Plug.sign_in(user)
       |> get(user_path(conn, :show, user.id))
 
-      assert json_response(conn, 201) == render_json(UserView, "jwt.json", user: user, jwt: token)
+      assert json_response(conn, 201) ==
+               render_json(UserView, "show.json", %{data: user, meta: %{jwt: token}, conn: conn})
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -47,7 +48,7 @@ defmodule DmlWeb.UserControllerTest do
     @tag :authenticated
     test "renders user when data is valid", %{conn: conn, user: user} do
       conn = get(conn, user_path(conn, :show, "me"))
-      assert json_response(conn, 200) == render_json(UserView, "show.json", user: user)
+      assert json_response(conn, 200) == render_json(UserView, "show.json", %{data: user, conn: conn})
     end
 
     test "renders errors when user is not authenticated", %{conn: conn} do
@@ -63,7 +64,7 @@ defmodule DmlWeb.UserControllerTest do
 
       conn = post(conn, user_path(conn, :authenticate), email: user.email, password: user.password)
 
-      assert %{"jwt" => token} = json_response(conn, 200)
+      assert %{"meta" => %{"jwt" => token}} = json_response(conn, 200)
 
       {:ok, claims} = Guardian.decode_and_verify(token)
       {:ok, token_user} = Guardian.resource_from_claims(claims)
@@ -85,7 +86,7 @@ defmodule DmlWeb.UserControllerTest do
     test "renders user when data is valid", %{conn: conn, user: %User{id: id} = _user} do
       params = params_for(:user) |> Map.take([:first_name, :last_name])
       conn = put(conn, user_path(conn, :update), user: params)
-      assert %{"id" => ^id} = json_response(conn, 200)
+      assert %{"data" => %{"id" => ^id}} = json_response(conn, 200)
 
       user = Accounts.get_user!(id)
 
@@ -93,8 +94,8 @@ defmodule DmlWeb.UserControllerTest do
       |> Plug.sign_in(user)
       |> get(user_path(conn, :show, user.id))
 
-      assert json_response(conn, 200) == render_json(UserView, "show.json", user: user)
-      assert json_response(conn, 200)["first_name"] == params[:first_name]
+      assert json_response(conn, 200) == render_json(UserView, "show.json", %{data: user, conn: conn})
+      assert json_response(conn, 200)["data"]["attributes"]["first_name"] == params[:first_name]
     end
 
     @tag :authenticated
