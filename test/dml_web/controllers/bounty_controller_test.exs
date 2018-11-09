@@ -14,7 +14,7 @@ defmodule DmlWeb.BountyControllerTest do
       bounty = insert(:bounty)
       conn = get(conn, bounty_path(conn, :index))
 
-      assert json_response(conn, 200) == render_json(BountyView, "index.json", bounties: [bounty])
+      assert json_response(conn, 200) == render_json(BountyView, "index.json", %{data: [bounty], conn: conn})
     end
 
     test "renders errors when unauthenticated", %{conn: conn} do
@@ -31,7 +31,8 @@ defmodule DmlWeb.BountyControllerTest do
 
       conn = get(conn, bounty_path(conn, :mine))
 
-      assert json_response(conn, 200) == render_json(BountyView, "index.json", bounties: [%{my_bounty | owner: nil}])
+      assert json_response(conn, 200) ==
+               render_json(BountyView, "index.json", %{data: [%{my_bounty | owner: nil}], conn: conn})
     end
 
     test "renders errors when unauthenticated", %{conn: conn} do
@@ -45,7 +46,7 @@ defmodule DmlWeb.BountyControllerTest do
     test "renders bounty when data is valid", %{conn: conn, user: user} do
       params = params_for(:bounty, rewards: [3, 2, 1], reward: 6)
       conn = post(conn, bounty_path(conn, :create), bounty: params)
-      assert %{"id" => id} = json_response(conn, 201)
+      assert %{"data" => %{"id" => id}} = json_response(conn, 201)
 
       bounty = Marketplace.get_bounty!(id)
       assert bounty.owner_id == user.id
@@ -74,7 +75,7 @@ defmodule DmlWeb.BountyControllerTest do
       bounty = insert(:bounty)
 
       conn = get(conn, bounty_path(conn, :show, bounty.id))
-      assert json_response(conn, 200) == render_json(BountyView, "show.json", bounty: bounty)
+      assert json_response(conn, 200) == render_json(BountyView, "show.json", %{data: bounty, conn: conn})
     end
   end
 
@@ -85,7 +86,7 @@ defmodule DmlWeb.BountyControllerTest do
 
       params = params_for(:bounty) |> Map.take([:name, :description])
       conn = put(conn, bounty_path(conn, :update, bounty), bounty: params)
-      assert %{"id" => ^id} = json_response(conn, 200)
+      assert %{"data" => %{"id" => ^id}} = json_response(conn, 200)
 
       bounty = Marketplace.get_bounty!(id)
       assert bounty.name == params[:name]
@@ -121,7 +122,7 @@ defmodule DmlWeb.BountyControllerTest do
       %{id: id} = bounty = insert(:bounty, owner: user)
 
       conn = put(conn, bounty_open_path(conn, :open, bounty))
-      assert %{"id" => ^id} = json_response(conn, 200)
+      assert %{"data" => %{"id" => ^id}} = json_response(conn, 200)
 
       bounty = Marketplace.get_bounty!(id)
       assert bounty.state == "open"
@@ -154,7 +155,7 @@ defmodule DmlWeb.BountyControllerTest do
       %{id: id} = bounty = insert(:bounty, owner: user, state: "open")
 
       conn = put(conn, bounty_close_path(conn, :close, bounty))
-      assert %{"id" => ^id} = json_response(conn, 200)
+      assert %{"data" => %{"id" => ^id}} = json_response(conn, 200)
 
       bounty = Marketplace.get_bounty!(id)
       assert bounty.state == "closed"
@@ -187,7 +188,7 @@ defmodule DmlWeb.BountyControllerTest do
       %{id: id} = bounty = insert(:bounty, owner: user, state: "closed")
 
       conn = put(conn, bounty_finish_path(conn, :finish, bounty))
-      assert %{"id" => ^id} = json_response(conn, 200)
+      assert %{"data" => %{"id" => ^id}} = json_response(conn, 200)
 
       bounty = Marketplace.get_bounty!(id)
       assert bounty.state == "finished"
@@ -219,7 +220,7 @@ defmodule DmlWeb.BountyControllerTest do
       params = %{winners: [enrollment_b.id, enrollment_a.id]}
 
       conn = put(conn, bounty_reward_path(conn, :reward, bounty), params)
-      assert %{"id" => ^id} = json_response(conn, 200)
+      assert %{"data" => %{"id" => ^id}} = json_response(conn, 200)
 
       bounty = Marketplace.get_bounty!(id)
       assert bounty.state == "finished"
