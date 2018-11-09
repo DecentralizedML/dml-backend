@@ -12,7 +12,7 @@ defmodule DmlWeb.EnrollmentController do
     with bounty <- Marketplace.get_bounty!(bounty_id),
          :ok <- Bodyguard.permit(Marketplace, :list_enrollments, current_user, bounty),
          enrollments <- Marketplace.list_enrollments(bounty) do
-      render(conn, "index.json", enrollments: enrollments)
+      render(conn, "index.json", data: enrollments)
     end
   end
 
@@ -22,7 +22,7 @@ defmodule DmlWeb.EnrollmentController do
     with bounty <- Marketplace.get_bounty!(bounty_id),
          :ok <- Bodyguard.permit(Marketplace, :enroll, current_user, bounty),
          {:ok, %Enrollment{} = enrollment} <- Marketplace.create_enrollment(current_user.id, bounty.id) do
-      render(conn, "enrollment.json", enrollment: enrollment)
+      render(conn, "show.json", data: enrollment)
     end
   end
 end
