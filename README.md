@@ -72,8 +72,8 @@ mix credo
 
 #### Staging
 
-* Install [Gigalixir][gigalixir]
-* Deploy the project using `git push gigalixir master`
+* Install [mina][mina]
+* Deploy the project using `mina deploy`
 * Point the front-end application to [staging][staging]
 
 ## Built With
@@ -90,5 +90,5 @@ TODO
 [elixir]:https://elixir-lang.org/
 [phoenix]:https://phoenixframework.org/
 [hex]:https://hex.pm/
-[gigalixir]:https://gigalixir.com/
-[staging]:https://elegant-brisk-indianjackal.gigalixirapp.com/
+[gigalixir]:https://github.com/mina-deploy/mina
+[staging]:https://dml-api.dev.kyokan.io/
