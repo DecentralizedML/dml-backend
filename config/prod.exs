@@ -16,11 +16,13 @@ use Mix.Config
 config :dml, DmlWeb.Endpoint,
   load_from_system_env: true,
   http: [port: {:system, "PORT"}],
-  url: [host: "dml-api.dev.kyokan.io", port: 80],
+  url: [host: "localhost", port: {:system, "PORT"}],
   # cache_static_manifest: "priv/static/cache_manifest.json",
   secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE"),
+  code_reloader: false,
   server: true,
-  code_reloader: false
+  root: '.',
+  version: Application.spec(:dml, :vsn)
 
 config :dml, Dml.Repo,
   adapter: Ecto.Adapters.Postgres,
