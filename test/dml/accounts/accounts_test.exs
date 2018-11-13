@@ -48,9 +48,22 @@ defmodule Dml.AccountsTest do
       assert user.last_name == @update_attrs[:last_name]
     end
 
+    test "update_user/2 with valid data (ETH address) updates the user" do
+      user = insert(:user)
+      assert {:ok, user} = Accounts.update_user(user, %{wallet_address: "0x32be343b94f860124dc4fee278fdcbd38c102d88"})
+      assert %User{} = user
+      assert user.wallet_address == "0x32be343b94f860124dc4fee278fdcbd38c102d88"
+    end
+
     test "update_user/2 with invalid data returns error changeset" do
       user = insert(:user)
       assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, %{first_name: ""})
+    end
+
+    test "update_user/2 with invalid ETH address returns error changeset" do
+      user = insert(:user)
+      assert {:error, changeset} = Accounts.update_user(user, %{wallet_address: "ha"})
+      assert "has invalid format" in errors_on(changeset).wallet_address
     end
 
     test "sign_in_user/2 with valid credentials" do

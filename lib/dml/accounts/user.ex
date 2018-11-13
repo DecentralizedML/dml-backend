@@ -43,9 +43,10 @@ defmodule Dml.Accounts.User do
 
   def update_changeset(user, attrs) do
     user
-    |> cast(attrs, [:first_name, :last_name])
+    |> cast(attrs, [:first_name, :last_name, :wallet_address])
     |> cast_attachments(attrs, [:profile_image])
     |> validate_first_and_last_name
+    |> validate_eth_address(:wallet_address)
   end
 
   defp validate_email(changeset) do
@@ -61,6 +62,11 @@ defmodule Dml.Accounts.User do
     |> validate_length(:password, min: 8)
     |> validate_confirmation(:password)
     |> put_password_hash
+  end
+
+  defp validate_eth_address(changeset, field) do
+    changeset
+    |> validate_format(field, ~r/^(0x)?[0-9a-f]{40}$/i)
   end
 
   defp validate_first_and_last_name(changeset) do
