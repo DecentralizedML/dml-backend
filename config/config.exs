@@ -23,6 +23,7 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+config :phoenix, :filter_parameters, ["password", "jwt", "private_key", "security_answer1", "security_answer2"]
 
 # CORS
 config :cors_plug,
