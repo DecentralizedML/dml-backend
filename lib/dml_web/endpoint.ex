@@ -1,7 +1,7 @@
 defmodule DmlWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :dml
 
-  socket("/socket", DmlWeb.UserSocket)
+  socket("/socket", DmlWeb.UserSocket, websocket: true)
 
   # Serve at "/" the static files from "priv/static" directory.
   #
