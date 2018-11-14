@@ -21,7 +21,7 @@ defmodule DmlWeb.AlgorithmController do
          algorithm <- Marketplace.get_algorithm!(algorithm.id) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", algorithm_path(conn, :show, algorithm))
+      |> put_resp_header("location", Routes.algorithm_path(conn, :show, algorithm))
       |> render("show.json", data: algorithm)
     end
   end
