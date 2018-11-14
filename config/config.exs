@@ -33,6 +33,14 @@ config :cors_plug,
     "https://clever-davinci-c72572.netlify.com"
   ]
 
+# Sentry
+config :sentry,
+  dsn: System.get_env("SENTRY_DSN") || "https://public_key@app.getsentry.com/1",
+  included_environments: ~w(production staging),
+  environment_name: System.get_env("SENTRY_ENV") || "development",
+  enable_source_code_context: true,
+  root_source_code_path: File.cwd!()
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

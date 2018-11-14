@@ -1,5 +1,8 @@
 defmodule DmlWeb.Endpoint do
+  use Plug.ErrorHandler
+  use Sentry.Plug
   use Phoenix.Endpoint, otp_app: :dml
+  use Sentry.Phoenix.Endpoint
 
   socket("/socket", DmlWeb.UserSocket, websocket: true)
 

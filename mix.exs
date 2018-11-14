@@ -30,7 +30,7 @@ defmodule Dml.Mixfile do
   def application do
     [
       mod: {Dml.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:sentry, :logger, :runtime_tools]
     ]
   end
 
@@ -66,6 +66,11 @@ defmodule Dml.Mixfile do
       {:sweet_xml, "~> 0.6"},
       {:cors_plug, "~> 1.5"},
       {:jsonapi, "~> 0.8", github: "jeregrine/jsonapi"},
+
+      # Error tracking
+      {:sentry, "~> 6.4"},
+
+      # Test environment
       {:credo, "~> 0.10", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.7", only: [:dev, :test], runtime: false},
       {:ex_machina, "~> 2.2", only: :test, github: "thoughtbot/ex_machina"},
