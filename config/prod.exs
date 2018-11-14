@@ -25,7 +25,6 @@ config :dml, DmlWeb.Endpoint,
   version: Application.spec(:dml, :vsn)
 
 config :dml, Dml.Repo,
-  adapter: Ecto.Adapters.Postgres,
   url: System.get_env("DATABASE_URL"),
   ssl: true,
   pool_size: Map.get(System.get_env(), "DATABASE_POOL_SIZE", 1)

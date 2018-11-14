@@ -11,7 +11,6 @@ config :logger, level: :warn
 
 # Configure your database
 config :dml, Dml.Repo,
-  adapter: Ecto.Adapters.Postgres,
   username: "postgres",
   password: "postgres",
   database: "dml_test",
