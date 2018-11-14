@@ -9,7 +9,6 @@ defmodule DmlWeb.ErrorViewTest do
   end
 
   test "renders 500.json" do
-    assert render(DmlWeb.ErrorView, "500.json", []) ==
-             %{errors: %{detail: "Internal Server Error"}}
+    assert render(DmlWeb.ErrorView, "500.json", []) == %{errors: %{detail: "Internal Server Error"}}
   end
 end
