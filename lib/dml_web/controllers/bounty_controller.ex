@@ -21,7 +21,7 @@ defmodule DmlWeb.BountyController do
          bounty <- Marketplace.get_bounty!(bounty.id) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", bounty_path(conn, :show, bounty))
+      |> put_resp_header("location", Routes.bounty_path(conn, :show, bounty))
       |> render("show.json", data: bounty)
     end
   end
