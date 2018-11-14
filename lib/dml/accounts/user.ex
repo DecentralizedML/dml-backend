@@ -20,6 +20,11 @@ defmodule Dml.Accounts.User do
     field(:facebook_uid, :string)
     field(:profile_image, DmlWeb.ProfileImageUploader.Type)
     field(:profile_image_url, :string)
+    field(:private_key, :binary)
+    field(:security_question1, :string)
+    field(:security_answer1, :string)
+    field(:security_question2, :string)
+    field(:security_answer2, :string)
     field(:new, :boolean, default: false, virtual: true)
 
     timestamps()
@@ -43,7 +48,16 @@ defmodule Dml.Accounts.User do
 
   def update_changeset(user, attrs) do
     user
-    |> cast(attrs, [:first_name, :last_name, :wallet_address])
+    |> cast(attrs, [
+      :first_name,
+      :last_name,
+      :wallet_address,
+      :private_key,
+      :security_question1,
+      :security_answer1,
+      :security_question2,
+      :security_answer2
+    ])
     |> cast_attachments(attrs, [:profile_image])
     |> validate_first_and_last_name
     |> validate_eth_address(:wallet_address)
