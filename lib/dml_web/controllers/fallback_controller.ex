@@ -9,25 +9,29 @@ defmodule DmlWeb.FallbackController do
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
     conn
     |> put_status(:unprocessable_entity)
-    |> render(DmlWeb.ChangesetView, "error.json", changeset: changeset)
+    |> put_view(DmlWeb.ChangesetView)
+    |> render("error.json", changeset: changeset)
   end
 
   def call(conn, {:error, :not_found}) do
     conn
     |> put_status(:not_found)
-    |> render(DmlWeb.ErrorView, :"404")
+    |> put_view(DmlWeb.ErrorView)
+    |> render(:"404")
   end
 
   def call(conn, {:error, :unauthorized}) do
     conn
     |> put_status(:unauthorized)
-    |> render(DmlWeb.ErrorView, :"401")
+    |> put_view(DmlWeb.ErrorView)
+    |> render(:"401")
   end
 
   def call(conn, {:error, _message}) do
     conn
     |> put_status(:unprocessable_entity)
-    |> render(DmlWeb.ErrorView, :"403")
+    |> put_view(DmlWeb.ErrorView)
+    |> render(:"403")
   end
 
   def auth_error(conn, {_type, _reason}, _opts), do: call(conn, {:error, :unauthorized})
