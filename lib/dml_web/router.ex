@@ -4,6 +4,7 @@ defmodule DmlWeb.Router do
 
   pipeline :api do
     plug(:accepts, ["json"])
+    plug(ProperCase.Plug.SnakeCaseParams)
   end
 
   pipeline :jwt_authenticated do

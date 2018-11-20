@@ -99,6 +99,22 @@ defmodule DmlWeb.UserControllerTest do
     end
 
     @tag :authenticated
+    test "renders user when data is valid (camel case params)", %{conn: conn, user: %User{id: id} = _user} do
+      params = params_for(:user) |> Map.take([:first_name, :last_name]) |> ProperCase.to_camel_case()
+      conn = put(conn, user_path(conn, :update), user: params)
+      assert %{"data" => %{"id" => ^id}} = json_response(conn, 200)
+
+      user = Accounts.get_user!(id)
+
+      conn
+      |> Plug.sign_in(user)
+      |> get(user_path(conn, :show, user.id))
+
+      assert json_response(conn, 200) == render_json(UserView, "show.json", %{data: user, conn: conn})
+      assert json_response(conn, 200)["data"]["attributes"]["first_name"] == params["firstName"]
+    end
+
+    @tag :authenticated
     test "renders errors when data is invalid", %{conn: conn} do
       params = params_for(:user, %{first_name: ""})
       conn = put(conn, user_path(conn, :update), user: params)
