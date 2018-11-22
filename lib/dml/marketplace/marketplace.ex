@@ -15,6 +15,10 @@ defmodule Dml.Marketplace do
     Bounty |> where([b], b.owner_id == ^user.id) |> Repo.all()
   end
 
+  def list_open_bounties do
+    Bounty |> where([b], b.state == "open") |> Repo.all() |> Repo.preload(:owner)
+  end
+
   def get_bounty!(id), do: Bounty |> Repo.get!(id) |> Repo.preload(:owner)
 
   def create_bounty(user_id, attrs \\ %{}) do

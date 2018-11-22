@@ -10,8 +10,9 @@ defmodule DmlWeb.BountyControllerTest do
 
   describe "index" do
     @tag :authenticated
-    test "lists all bounties", %{conn: conn} do
-      bounty = insert(:bounty)
+    test "lists all open bounties", %{conn: conn} do
+      bounty = insert(:bounty, state: "open")
+      _bounty = insert(:bounty, state: "closed")
       conn = get(conn, bounty_path(conn, :index))
 
       assert json_response(conn, 200) == render_json(BountyView, "index.json", %{data: [bounty], conn: conn})
