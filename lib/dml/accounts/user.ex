@@ -8,6 +8,8 @@ defmodule Dml.Accounts.User do
   @derive {Phoenix.Param, key: :id}
 
   @genders ["male", "female", "other"]
+  @education_levels ["primary", "secondary", "associates", "bachelors", "masters", "doctorate"]
+
   @create_attributes [:email, :password, :password_confirmation]
   @create_oauth_attributes [:email, :first_name, :last_name, :google_uid, :facebook_uid, :profile_image_url]
   @update_attributes [
@@ -83,6 +85,7 @@ defmodule Dml.Accounts.User do
     |> validate_security_answers
     |> validate_country
     |> validate_inclusion(:gender, @genders)
+    |> validate_inclusion(:education_level, @education_levels)
   end
 
   defp validate_email(changeset) do
