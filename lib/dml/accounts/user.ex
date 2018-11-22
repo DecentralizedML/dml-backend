@@ -79,6 +79,7 @@ defmodule Dml.Accounts.User do
     |> cast_attachments(attrs, [:profile_image])
     |> validate_first_and_last_name
     |> validate_eth_address(:wallet_address)
+    |> validate_security_answers
   end
 
   defp validate_email(changeset) do
@@ -104,6 +105,22 @@ defmodule Dml.Accounts.User do
   defp validate_first_and_last_name(changeset) do
     changeset
     |> validate_required([:first_name, :last_name], trim: true)
+  end
+
+  defp validate_security_answers(changeset) do
+    case changeset do
+      %Ecto.Changeset{valid?: true, changes: %{security_answer1: answer1, security_answer2: answer2}} ->
+        changeset
+        |> put_change(:security_answer1, hashpwsalt(answer1))
+        |> put_change(:security_answer2, hashpwsalt(answer2))
+
+      %Ecto.Changeset{valid?: true, changes: %{security_answer1: answer1}} ->
+        changeset
+        |> put_change(:security_answer1, hashpwsalt(answer1))
+
+      _ ->
+        changeset
+    end
   end
 
   defp put_password_hash(changeset) do
