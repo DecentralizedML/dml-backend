@@ -89,6 +89,12 @@ defmodule Dml.AccountsTest do
       assert "is invalid" in errors_on(changeset).education_level
     end
 
+    test "update_user/2 with invalid permissions returns error changeset" do
+      user = insert(:user)
+      assert {:error, changeset} = Accounts.update_user(user, %{permissions: ["sms", "other"]})
+      assert "has an invalid entry" in errors_on(changeset).permissions
+    end
+
     test "sign_in_user/2 with valid credentials" do
       {:ok, user} = Accounts.create_user(@valid_attrs)
       assert {:ok, _token, %{"sub" => id}} = Accounts.sign_in_user(user.email, user.password)

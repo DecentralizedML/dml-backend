@@ -9,6 +9,7 @@ defmodule Dml.Accounts.User do
 
   @genders ["male", "female", "other"]
   @education_levels ["primary", "secondary", "associates", "bachelors", "masters", "doctorate"]
+  @permissions ["sms", "photo", "twitter"]
 
   @create_attributes [:email, :password, :password_confirmation]
   @create_oauth_attributes [:email, :first_name, :last_name, :google_uid, :facebook_uid, :profile_image_url]
@@ -86,6 +87,7 @@ defmodule Dml.Accounts.User do
     |> validate_country
     |> validate_inclusion(:gender, @genders)
     |> validate_inclusion(:education_level, @education_levels)
+    |> validate_subset(:permissions, @permissions)
   end
 
   defp validate_email(changeset) do
