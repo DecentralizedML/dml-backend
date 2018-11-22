@@ -18,6 +18,15 @@ defmodule Dml.MarketplaceTest do
       assert has_element_by_id(bounties, %{id: bounty.id})
     end
 
+    test "list_open_bounties/0 returns only open bounties" do
+      bounty = insert(:bounty, state: "open")
+      _bounty = insert(:bounty, state: "closed")
+      bounties = Marketplace.list_open_bounties()
+
+      assert Enum.count(bounties) == 1
+      assert has_element_by_id(bounties, %{id: bounty.id})
+    end
+
     test "list_bounties_from_user/1 returns user bounties" do
       bounty = insert(:bounty)
       _other_bounty = insert(:bounty)

@@ -7,7 +7,7 @@ defmodule DmlWeb.BountyController do
   action_fallback(DmlWeb.FallbackController)
 
   def index(conn, _params) do
-    bounties = Marketplace.list_bounties()
+    bounties = Marketplace.list_open_bounties()
     render(conn, "index.json", data: bounties)
   end
 
