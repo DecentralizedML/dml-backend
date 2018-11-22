@@ -5,7 +5,17 @@ defmodule DmlWeb.UserView do
   alias DmlWeb.ProfileImageUploader
 
   def fields do
-    [:email, :first_name, :last_name, :profile_image, :wallet_address]
+    [
+      :email,
+      :first_name,
+      :last_name,
+      :profile_image,
+      :country,
+      :date_of_birth,
+      :gender,
+      :education_level,
+      :wallet_address
+    ]
   end
 
   def profile_image(%User{profile_image: nil, profile_image_url: image}, _conn), do: image
