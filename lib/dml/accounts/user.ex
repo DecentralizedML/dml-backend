@@ -80,6 +80,7 @@ defmodule Dml.Accounts.User do
     |> validate_first_and_last_name
     |> validate_eth_address(:wallet_address)
     |> validate_security_answers
+    |> validate_country
   end
 
   defp validate_email(changeset) do
@@ -121,6 +122,15 @@ defmodule Dml.Accounts.User do
       _ ->
         changeset
     end
+  end
+
+  defp validate_country(changeset) do
+    validate_change(changeset, :country, fn _, country ->
+      case Countries.exists?(:alpha2, country) do
+        true -> []
+        false -> [{:country, "is invalid"}]
+      end
+    end)
   end
 
   defp put_password_hash(changeset) do

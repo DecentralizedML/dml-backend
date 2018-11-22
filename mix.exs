@@ -67,6 +67,7 @@ defmodule Dml.Mixfile do
       {:cors_plug, "~> 1.5"},
       {:jsonapi, "~> 0.8", github: "jeregrine/jsonapi"},
       {:proper_case, "~> 1.0"},
+      {:countries, "~> 1.5"},
 
       # Error tracking
       {:sentry, "~> 6.4"},
