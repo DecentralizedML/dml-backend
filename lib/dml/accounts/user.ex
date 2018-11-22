@@ -7,6 +7,7 @@ defmodule Dml.Accounts.User do
   @primary_key {:id, :binary_id, autogenerate: true}
   @derive {Phoenix.Param, key: :id}
 
+  @genders ["male", "female", "other"]
   @create_attributes [:email, :password, :password_confirmation]
   @create_oauth_attributes [:email, :first_name, :last_name, :google_uid, :facebook_uid, :profile_image_url]
   @update_attributes [
@@ -47,7 +48,7 @@ defmodule Dml.Accounts.User do
     field(:security_answer1, :string)
     field(:security_question2, :string)
     field(:security_answer2, :string)
-    field(:country, :string, length: 2)
+    field(:country, :string)
     field(:date_of_birth, :date)
     field(:gender, :string)
     field(:education_level, :string)
@@ -81,6 +82,7 @@ defmodule Dml.Accounts.User do
     |> validate_eth_address(:wallet_address)
     |> validate_security_answers
     |> validate_country
+    |> validate_inclusion(:gender, @genders)
   end
 
   defp validate_email(changeset) do

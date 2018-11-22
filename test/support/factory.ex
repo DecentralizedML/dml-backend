@@ -12,7 +12,8 @@ defmodule Dml.Factory do
       password: password,
       password_confirmation: password,
       security_answer1: Name.first_name(),
-      country: "US"
+      country: "US",
+      gender: "male"
     }
   end
 
