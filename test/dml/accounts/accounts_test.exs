@@ -83,6 +83,12 @@ defmodule Dml.AccountsTest do
       assert "is invalid" in errors_on(changeset).gender
     end
 
+    test "update_user/2 with invalid education level returns error changeset" do
+      user = insert(:user)
+      assert {:error, changeset} = Accounts.update_user(user, %{education_level: "ha"})
+      assert "is invalid" in errors_on(changeset).education_level
+    end
+
     test "sign_in_user/2 with valid credentials" do
       {:ok, user} = Accounts.create_user(@valid_attrs)
       assert {:ok, _token, %{"sub" => id}} = Accounts.sign_in_user(user.email, user.password)
