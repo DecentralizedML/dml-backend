@@ -3,12 +3,12 @@ defmodule Dml.AccountsTest do
 
   alias Dml.Accounts
 
+  @valid_attrs params_for(:user)
+  @update_attrs params_for(:user) |> Map.drop([:email, :password, :password_confirmation])
+  @invalid_attrs params_for(:user, email: "wrong")
+
   describe "users" do
     alias Dml.Accounts.User
-
-    @valid_attrs params_for(:user)
-    @update_attrs params_for(:user) |> Map.drop([:email, :password, :password_confirmation])
-    @invalid_attrs params_for(:user, email: "wrong")
 
     test "list_users/0 returns all users" do
       user = insert(:user)
@@ -41,7 +41,7 @@ defmodule Dml.AccountsTest do
       assert "has already been taken" in errors_on(changeset).email
     end
 
-    test "update_user/2 with valid data (only name) updates the user" do
+    test "update_user/2 with valid data updates the user" do
       user = insert(:user)
       assert {:ok, user} = Accounts.update_user(user, @update_attrs)
       assert %User{} = user
@@ -75,6 +75,12 @@ defmodule Dml.AccountsTest do
       assert "is invalid" in errors_on(changeset).country
       assert {:error, changeset} = Accounts.update_user(user, %{country: "br"})
       assert "is invalid" in errors_on(changeset).country
+    end
+
+    test "update_user/2 with invalid gender returns error changeset" do
+      user = insert(:user)
+      assert {:error, changeset} = Accounts.update_user(user, %{gender: "ha"})
+      assert "is invalid" in errors_on(changeset).gender
     end
 
     test "sign_in_user/2 with valid credentials" do
