@@ -7,6 +7,26 @@ defmodule Dml.Accounts.User do
   @primary_key {:id, :binary_id, autogenerate: true}
   @derive {Phoenix.Param, key: :id}
 
+  @create_attributes [:email, :password, :password_confirmation]
+  @create_oauth_attributes [:email, :first_name, :last_name, :google_uid, :facebook_uid, :profile_image_url]
+  @update_attributes [
+    :first_name,
+    :last_name,
+    :wallet_address,
+    :encrypted_seedphrase_with_password,
+    :encrypted_seedphrase_with_answer1,
+    :encrypted_seedphrase_with_answer2,
+    :security_question1,
+    :security_answer1,
+    :security_question2,
+    :security_answer2,
+    :country,
+    :date_of_birth,
+    :gender,
+    :education_level,
+    :permissions
+  ]
+
   schema "users" do
     field(:email, :string)
     field(:first_name, :string)
@@ -20,11 +40,18 @@ defmodule Dml.Accounts.User do
     field(:facebook_uid, :string)
     field(:profile_image, DmlWeb.ProfileImageUploader.Type)
     field(:profile_image_url, :string)
-    field(:private_key, :binary)
+    field(:encrypted_seedphrase_with_password, :string)
+    field(:encrypted_seedphrase_with_answer1, :string)
+    field(:encrypted_seedphrase_with_answer2, :string)
     field(:security_question1, :string)
     field(:security_answer1, :string)
     field(:security_question2, :string)
     field(:security_answer2, :string)
+    field(:country, :string, length: 2)
+    field(:date_of_birth, :date)
+    field(:gender, :string)
+    field(:education_level, :string)
+    field(:permissions, {:array, :string})
     field(:new, :boolean, default: false, virtual: true)
 
     timestamps()
@@ -35,29 +62,20 @@ defmodule Dml.Accounts.User do
 
   def create_changeset(user, attrs) do
     user
-    |> cast(attrs, [:email, :password, :password_confirmation])
+    |> cast(attrs, @create_attributes)
     |> validate_email
     |> validate_password
   end
 
   def create_from_oauth_changeset(user, attrs) do
     user
-    |> cast(attrs, [:email, :first_name, :last_name, :google_uid, :facebook_uid, :profile_image_url])
+    |> cast(attrs, @create_oauth_attributes)
     |> validate_email
   end
 
   def update_changeset(user, attrs) do
     user
-    |> cast(attrs, [
-      :first_name,
-      :last_name,
-      :wallet_address,
-      :private_key,
-      :security_question1,
-      :security_answer1,
-      :security_question2,
-      :security_answer2
-    ])
+    |> cast(attrs, @update_attributes)
     |> cast_attachments(attrs, [:profile_image])
     |> validate_first_and_last_name
     |> validate_eth_address(:wallet_address)
