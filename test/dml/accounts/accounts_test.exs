@@ -7,7 +7,7 @@ defmodule Dml.AccountsTest do
     alias Dml.Accounts.User
 
     @valid_attrs params_for(:user)
-    @update_attrs params_for(:user) |> Map.take([:first_name, :last_name])
+    @update_attrs params_for(:user) |> Map.take([:first_name, :last_name, :security_answer1])
     @invalid_attrs params_for(:user, email: "wrong")
 
     test "list_users/0 returns all users" do
@@ -26,6 +26,7 @@ defmodule Dml.AccountsTest do
     test "create_user/1 with valid data creates a user" do
       assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
       assert user.email == @valid_attrs[:email]
+      assert Regex.match?(~r/\$2b\$04\$.*/, user.password_hash)
     end
 
     test "create_user/1 with invalid data returns error changeset" do
@@ -46,6 +47,7 @@ defmodule Dml.AccountsTest do
       assert %User{} = user
       assert user.first_name == @update_attrs[:first_name]
       assert user.last_name == @update_attrs[:last_name]
+      assert Regex.match?(~r/\$2b\$04\$.*/, user.security_answer1)
     end
 
     test "update_user/2 with valid data (ETH address) updates the user" do
