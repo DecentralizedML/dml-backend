@@ -11,7 +11,8 @@ defmodule Dml.Factory do
       last_name: Name.last_name(),
       password: password,
       password_confirmation: password,
-      security_answer1: Name.first_name()
+      security_answer1: Name.first_name(),
+      country: "US"
     }
   end
 

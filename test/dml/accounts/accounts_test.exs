@@ -7,7 +7,7 @@ defmodule Dml.AccountsTest do
     alias Dml.Accounts.User
 
     @valid_attrs params_for(:user)
-    @update_attrs params_for(:user) |> Map.take([:first_name, :last_name, :security_answer1])
+    @update_attrs params_for(:user) |> Map.drop([:email, :password, :password_confirmation])
     @invalid_attrs params_for(:user, email: "wrong")
 
     test "list_users/0 returns all users" do
@@ -48,6 +48,7 @@ defmodule Dml.AccountsTest do
       assert user.first_name == @update_attrs[:first_name]
       assert user.last_name == @update_attrs[:last_name]
       assert Regex.match?(~r/\$2b\$04\$.*/, user.security_answer1)
+      assert user.country
     end
 
     test "update_user/2 with valid data (ETH address) updates the user" do
@@ -66,6 +67,14 @@ defmodule Dml.AccountsTest do
       user = insert(:user)
       assert {:error, changeset} = Accounts.update_user(user, %{wallet_address: "ha"})
       assert "has invalid format" in errors_on(changeset).wallet_address
+    end
+
+    test "update_user/2 with invalid country code returns error changeset" do
+      user = insert(:user)
+      assert {:error, changeset} = Accounts.update_user(user, %{country: "Brasil"})
+      assert "is invalid" in errors_on(changeset).country
+      assert {:error, changeset} = Accounts.update_user(user, %{country: "br"})
+      assert "is invalid" in errors_on(changeset).country
     end
 
     test "sign_in_user/2 with valid credentials" do
