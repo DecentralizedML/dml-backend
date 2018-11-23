@@ -7,29 +7,29 @@ defmodule Dml.Accounts.User do
   @primary_key {:id, :binary_id, autogenerate: true}
   @derive {Phoenix.Param, key: :id}
 
-  @genders ["male", "female", "other"]
-  @education_levels ["primary", "secondary", "associates", "bachelors", "masters", "doctorate"]
-  @permissions ["sms", "photo", "twitter"]
+  @genders ~w(male female other)
+  @education_levels ~w(primary secondary associates bachelors masters doctorate)
+  @permissions ~w(sms photo twitter)
 
-  @create_attributes [:email, :password, :password_confirmation]
-  @create_oauth_attributes [:email, :first_name, :last_name, :google_uid, :facebook_uid, :profile_image_url]
-  @update_attributes [
-    :first_name,
-    :last_name,
-    :wallet_address,
-    :encrypted_seedphrase_with_password,
-    :encrypted_seedphrase_with_answer1,
-    :encrypted_seedphrase_with_answer2,
-    :security_question1,
-    :security_answer1,
-    :security_question2,
-    :security_answer2,
-    :country,
-    :date_of_birth,
-    :gender,
-    :education_level,
-    :permissions
-  ]
+  @create_attributes ~w(email password password_confirmation)a
+  @create_oauth_attributes ~w(email first_name last_name google_uid facebook_uid profile_image_url)a
+  @update_attributes ~w(
+    first_name
+    last_name
+    wallet_address
+    encrypted_seedphrase_with_password
+    encrypted_seedphrase_with_answer1
+    encrypted_seedphrase_with_answer2
+    security_question1
+    security_answer1
+    security_question2
+    security_answer2
+    country
+    date_of_birth
+    gender
+    education_level
+    permissions
+  )a
 
   schema "users" do
     field(:email, :string)
@@ -83,7 +83,7 @@ defmodule Dml.Accounts.User do
     |> cast_attachments(attrs, [:profile_image])
     |> validate_first_and_last_name
     |> validate_eth_address(:wallet_address)
-    |> validate_security_answers
+    |> validate_and_hash_security_answers
     |> validate_country
     |> validate_inclusion(:gender, @genders)
     |> validate_inclusion(:education_level, @education_levels)
@@ -115,7 +115,7 @@ defmodule Dml.Accounts.User do
     |> validate_required([:first_name, :last_name], trim: true)
   end
 
-  defp validate_security_answers(changeset) do
+  defp validate_and_hash_security_answers(changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{security_answer1: answer1, security_answer2: answer2}} ->
         changeset
@@ -133,10 +133,7 @@ defmodule Dml.Accounts.User do
 
   defp validate_country(changeset) do
     validate_change(changeset, :country, fn _, country ->
-      case Countries.exists?(:alpha2, country) do
-        true -> []
-        false -> [{:country, "is invalid"}]
-      end
+      if Countries.exists?(:alpha2, country), do: [], else: [{:country, "is invalid"}]
     end)
   end
 
