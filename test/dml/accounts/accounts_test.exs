@@ -47,8 +47,14 @@ defmodule Dml.AccountsTest do
       assert %User{} = user
       assert user.first_name == @update_attrs[:first_name]
       assert user.last_name == @update_attrs[:last_name]
-      assert Regex.match?(~r/\$2b\$04\$.*/, user.security_answer1)
       assert user.country
+    end
+
+    test "update_user/2 with valid data hashes the security answer" do
+      user = insert(:user)
+      assert {:ok, user} = Accounts.update_user(user, %{security_answer1: "hi", security_answer2: "hello"})
+      assert Bcrypt.verify_pass("hi", user.security_answer1)
+      assert Bcrypt.verify_pass("hello", user.security_answer2)
     end
 
     test "update_user/2 with valid data (ETH address) updates the user" do
