@@ -200,6 +200,13 @@ defmodule Dml.MarketplaceTest do
       assert Regex.match?(~r{/uploads/algorithms/[a-f\d-]+/[A-F\d]+_original.txt\?v=\d+}, url)
     end
 
+    test "update_algorithm/2 with tags updates the algorithm" do
+      algorithm = insert(:algorithm)
+      assert {:ok, %Algorithm{} = algorithm} = Marketplace.update_algorithm(algorithm, %{tags: ["hi", "hello"]})
+      assert Enum.member?(algorithm.tags, "hi")
+      assert Enum.member?(algorithm.tags, "hello")
+    end
+
     test "update_algorithm/2 with invalid data returns error changeset" do
       algorithm = insert(:algorithm)
       assert {:error, %Ecto.Changeset{}} = Marketplace.update_algorithm(algorithm, @invalid_attrs)

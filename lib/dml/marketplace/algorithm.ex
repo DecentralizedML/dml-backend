@@ -6,6 +6,9 @@ defmodule Dml.Marketplace.Algorithm do
   @primary_key {:id, :binary_id, autogenerate: true}
   @derive {Phoenix.Param, key: :id}
 
+  @create_attributes ~w(title description data_required device_fee)a
+  @update_attributes ~w(title description data_required device_fee tags bounty_id enrollment_id)a
+
   schema "algorithms" do
     field(:title, :string)
     field(:description, :string)
@@ -13,6 +16,7 @@ defmodule Dml.Marketplace.Algorithm do
     field(:device_fee, :integer, default: 1)
     field(:file, DmlWeb.Algorithm.Type)
     field(:state, :string, default: "pending")
+    field(:tags, {:array, :string})
 
     timestamps()
 
@@ -24,14 +28,14 @@ defmodule Dml.Marketplace.Algorithm do
 
   def create_changeset(bounty, attrs) do
     bounty
-    |> cast(attrs, [:title, :description, :data_required, :device_fee])
+    |> cast(attrs, @create_attributes)
     |> validate_title_and_description
     |> validate_device_fee
   end
 
   def update_changeset(bounty, attrs) do
     bounty
-    |> cast(attrs, [:title, :description, :data_required, :device_fee, :bounty_id, :enrollment_id])
+    |> cast(attrs, @update_attributes)
     |> cast_attachments(attrs, [:file])
     |> validate_title_and_description
     |> validate_device_fee
