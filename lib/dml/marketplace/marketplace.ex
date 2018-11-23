@@ -8,18 +8,29 @@ defmodule Dml.Marketplace do
   alias Ecto.Multi
 
   def list_bounties do
-    Bounty |> Repo.all() |> Repo.preload(:owner)
+    Bounty
+    |> Repo.all()
+    |> Repo.preload(:owner)
   end
 
   def list_bounties_from_user(%User{} = user) do
-    Bounty |> where([b], b.owner_id == ^user.id) |> Repo.all()
+    Bounty
+    |> where([b], b.owner_id == ^user.id)
+    |> Repo.all()
   end
 
   def list_open_bounties do
-    Bounty |> where([b], b.state == "open") |> Repo.all() |> Repo.preload(:owner)
+    Bounty
+    |> where([b], b.state == "open")
+    |> Repo.all()
+    |> Repo.preload(:owner)
   end
 
-  def get_bounty!(id), do: Bounty |> Repo.get!(id) |> Repo.preload(:owner)
+  def get_bounty!(id) do
+    Bounty
+    |> Repo.get!(id)
+    |> Repo.preload(:owner)
+  end
 
   def create_bounty(user_id, attrs \\ %{}) do
     %Bounty{owner_id: user_id}
@@ -58,10 +69,17 @@ defmodule Dml.Marketplace do
   end
 
   def list_enrollments(%Bounty{} = bounty) do
-    Enrollment |> where([e], e.bounty_id == ^bounty.id) |> Repo.all() |> Repo.preload([:user, :bounty])
+    Enrollment
+    |> where([e], e.bounty_id == ^bounty.id)
+    |> Repo.all()
+    |> Repo.preload([:user, :bounty])
   end
 
-  def get_enrollment!(id), do: Enrollment |> Repo.get!(id) |> Repo.preload([:user, :bounty])
+  def get_enrollment!(id) do
+    Enrollment
+    |> Repo.get!(id)
+    |> Repo.preload([:user, :bounty])
+  end
 
   def create_enrollment(user_id, bounty_id) do
     %Enrollment{bounty_id: bounty_id, user_id: user_id}
@@ -74,18 +92,30 @@ defmodule Dml.Marketplace do
   end
 
   def list_algorithms do
-    Algorithm |> Repo.all() |> Repo.preload([:user, :enrollment, :bounty])
+    Algorithm
+    |> Repo.all()
+    |> Repo.preload([:user, :enrollment, :bounty])
   end
 
   def list_algorithms_from_user(%User{} = user) do
-    Algorithm |> where([a], a.user_id == ^user.id) |> Repo.all() |> Repo.preload([:enrollment, :bounty])
+    Algorithm
+    |> where([a], a.user_id == ^user.id)
+    |> Repo.all()
+    |> Repo.preload([:enrollment, :bounty])
   end
 
   def list_approved_algorithms do
-    Algorithm |> where([a], a.state == "approved") |> Repo.all() |> Repo.preload([:user, :enrollment, :bounty])
+    Algorithm
+    |> where([a], a.state == "approved")
+    |> Repo.all()
+    |> Repo.preload([:user, :enrollment, :bounty])
   end
 
-  def get_algorithm!(id), do: Algorithm |> Repo.get!(id) |> Repo.preload([:user, :enrollment, :bounty])
+  def get_algorithm!(id) do
+    Algorithm
+    |> Repo.get!(id)
+    |> Repo.preload([:user, :enrollment, :bounty])
+  end
 
   def create_algorithm(user_id, attrs \\ %{}) do
     %Algorithm{user_id: user_id}
