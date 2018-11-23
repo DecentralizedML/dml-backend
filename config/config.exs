@@ -37,12 +37,7 @@ config :phoenix, :filter_parameters, [
 
 # CORS
 config :cors_plug,
-  origin: [
-    "http://localhost:3000",
-    "http://localhost:4000",
-    "https://elegant-brisk-indianjackal.gigalixirapp.com",
-    "https://clever-davinci-c72572.netlify.com"
-  ]
+  origin: "*"
 
 # Sentry
 config :sentry,
